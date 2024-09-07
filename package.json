@@ -8,6 +8,9 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "prisma": {
+    "seed": "ts-node -r tsconfig-paths/register prisma/seed.ts"
+  },
   "dependencies": {
     "@prisma/client": "^5.19.1",
     "next": "14.2.8",
@@ -15,7 +18,7 @@
     "react-dom": "^18"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/node": "^20.16.5",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
@@ -23,6 +26,8 @@
     "postcss": "^8",
     "prisma": "^5.19.1",
     "tailwindcss": "^3.4.1",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.5.4"
   }
 }
