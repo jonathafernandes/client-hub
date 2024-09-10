@@ -12,6 +12,14 @@ const Dashboard = async () => {
             id: true,
             name: true,
             fantasyName: true,
+            address: true,
+            city: true,
+            email: true,
+            phone: true,
+            district: true,
+            zipCode: true,
+            corporateName: true,
+            referencePoint: true,
             orders: {
                 select: {
                     id: true,
@@ -73,9 +81,7 @@ const Dashboard = async () => {
                     </thead>
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
                         {clients.map((client) => (
-                            <tr className="text-sm text-gray-400" key={client.id}>
-                                <ClientItem client={client} />
-                            </tr>
+                            <ClientItem key={client.id} client={client} />
                         ))}
                     </tbody>
                 </table>

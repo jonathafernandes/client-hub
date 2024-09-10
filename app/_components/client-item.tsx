@@ -1,40 +1,113 @@
-// ClientItem.tsx
 import React from "react";
 import { Prisma } from "@prisma/client";
+import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
+import { Button } from "./ui/button";
 
 type ClientWithOrders = Prisma.ClientGetPayload<{
-  select: {
-    id: true;
-    name: true;
-    fantasyName: true;
-    orders: {
-      select: {
+    select: {
         id: true;
-        totalValue: true;
-        discount: true;
-        createdAt: true;
-        client: {
-          select: {
-            fantasyName: true;
-          };
+        name: true;
+        fantasyName: true;
+        address: true;
+        city: true;
+        email: true;
+        phone: true;
+        district: true;
+        zipCode: true;
+        corporateName: true;
+        referencePoint: true;
+        orders: {
+            select: {
+                id: true;
+                totalValue: true;
+                discount: true;
+                createdAt: true;
+                client: {
+                    select: {
+                        fantasyName: true;
+                    };
+                };
+            };
         };
-      };
     };
-  };
 }>;
 
 interface ClientItemProps {
-  client: ClientWithOrders;
+    client: ClientWithOrders;
 }
 
 const ClientItem: React.FC<ClientItemProps> = ({ client }) => {
-  return (
-    <>
-      <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.name ?? 'N/A'}</td>
-      <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.fantasyName ?? 'N/A'}</td>
-      <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
-    </>
-  );
+    const formatCurrency = (value: Prisma.Decimal | null) => {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        }).format(value ? Number(value) : 0);
+    };
+
+    const formatDate = (date: Date) => {
+        return new Date(date).toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        });
+    };
+
+    return (
+        <tr className="text-sm text-gray-400">
+            <Sheet>
+                <SheetTrigger asChild>
+                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap cursor-pointer hover:bg-gray-800">
+                        {client.name ?? 'N/A'}
+                    </td>
+                </SheetTrigger>
+                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.fantasyName ?? 'N/A'}</td>
+                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
+                <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
+                    <div className="mt-6">
+                        <h2 className="text-xl font-bold mb-4">{client.name}</h2>
+                        <p className="mb-2"><strong>Nome Fantasia:</strong> {client.fantasyName ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>Razão Social:</strong> {client.corporateName ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>Endereço:</strong> {client.address ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>Bairro:</strong> {client.district ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>Cidade:</strong> {client.city ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>CEP:</strong> {client.zipCode ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>Ponto de referência:</strong> {client.referencePoint ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>E-mail:</strong> {client.email ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>Telefone:</strong> {client.phone ?? 'N/A'}</p>
+
+                        <p className="mb-4"><strong>Número de pedidos:</strong> {client.orders.length}</p>
+
+                        <div className="border-t pt-3 mb-3 flex items-center justify-between">
+                            <h3 className="font-semibold">Pedidos recentes</h3>
+                            <Button variant="default" className="font-bold p-2">
+                                Novo pedido
+                            </Button>
+                        </div>
+                        <div className="overflow-x-auto">
+                            <table className="min-w-full divide-y divide-gray-200">
+                                <thead className="bg-gray-50">
+                                    <tr>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Numero</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="bg-white divide-y text-gray-500 divide-gray-200">
+                                    {client.orders.slice(0, 5).map((order) => (
+                                        <tr key={order.id}>
+                                            <td className="px-6 py-4 whitespace-nowrap">{String(order.id).slice(-4)}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </SheetContent>
+            </Sheet>
+        </tr>
+    );
 }
 
 export default ClientItem;
