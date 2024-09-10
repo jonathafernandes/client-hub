@@ -1,49 +1,50 @@
+// Dashboard.tsx
 import React from "react";
 import { db } from "../_lib/prisma";
 import { Button } from "./ui/button";
 import Link from "next/link";
+import ClientItem from "./client-item";
+import { Prisma } from "@prisma/client";
 
 const Dashboard = async () => {
-    const clients = await db.client.findMany(
-        {
-            select: {
-                id: true,
-                name: true,
-                fantasyName: true,
-                orders: {
-                    select: {
-                        id: true,
-                        totalValue: true,
-                        discount: true,
-                        createdAt: true,
-                        client: {
-                            select: {
-                                fantasyName: true,
-                            },
+    const clients = await db.client.findMany({
+        select: {
+            id: true,
+            name: true,
+            fantasyName: true,
+            orders: {
+                select: {
+                    id: true,
+                    totalValue: true,
+                    discount: true,
+                    createdAt: true,
+                    client: {
+                        select: {
+                            fantasyName: true,
                         },
                     },
                 },
             },
-        }
-    );
+        },
+    });
 
-    const formatDate = (date) => {
-        return new Date(date).toLocaleDateString('pt-BR', {
+    const formatDate = (date: Date) => {
+        return date.toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',
         });
     };
 
-    const formatCurrency = (value) => {
+    const formatCurrency = (value: Prisma.Decimal | null) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
-        }).format(value);
+        }).format(value ? Number(value) : 0);
     };
 
-    const formatPercentage = (value) => {
-        return `${value}%`;
+    const formatPercentage = (value: Prisma.Decimal | null) => {
+        return `${value ? Number(value) : 0}%`;
     };
 
     return (
@@ -73,9 +74,7 @@ const Dashboard = async () => {
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
                         {clients.map((client) => (
                             <tr className="text-sm text-gray-400" key={client.id}>
-                                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.name}</td>
-                                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.fantasyName}</td>
-                                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
+                                <ClientItem client={client} />
                             </tr>
                         ))}
                     </tbody>
@@ -95,14 +94,14 @@ const Dashboard = async () => {
                         </tr>
                     </thead>
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
-                        {clients.map((client) =>
-                            client.orders.map((orders) => (
-                                <tr className="text-sm text-gray-400" key={orders.id}>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{String(orders.id).slice(-4)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{orders.client.fantasyName}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatDate(orders.createdAt)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatPercentage(orders.discount)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatCurrency(orders.totalValue)}</td>
+                        {clients.flatMap((client) =>
+                            client.orders.map((order) => (
+                                <tr className="text-sm text-gray-400" key={order.id}>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{String(order.id).slice(-4)}</td>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{order.client.fantasyName ?? 'N/A'}</td>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatDate(order.createdAt)}</td>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatPercentage(order.discount)}</td>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
                                 </tr>
                             ))
                         )}

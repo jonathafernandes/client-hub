@@ -138,7 +138,7 @@ const NewClientPage = () => {
                 </div>
                 <div className="mb-4">
                     <label htmlFor="zipCode" className="block text-sm font-medium text-gray-300">
-                        zipCode
+                        CEP
                     </label>
                     <input
                         type="text"
