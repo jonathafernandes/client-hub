@@ -1,7 +1,7 @@
 import Image from "next/image"
-import { Button } from "../../src/components/ui/button"
+import { Button } from "./ui/button"
 import React from "react"
-import { Card, CardContent } from "../../src/components/ui/card";
+import { Card, CardContent } from "./ui/card";
 
 const SignInDialog = () => {
   return (

@@ -1,5 +1,7 @@
 import React from "react";
 import { db } from "../_lib/prisma";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 const Dashboard = async () => {
     const clients = await db.client.findMany(
@@ -8,7 +10,7 @@ const Dashboard = async () => {
                 id: true,
                 name: true,
                 fantasyName: true,
-                request: {
+                orders: {
                     select: {
                         id: true,
                         totalValue: true,
@@ -47,7 +49,18 @@ const Dashboard = async () => {
     return (
         <div className="text-sm mb-16 px-4 sm:px-6 lg:px-8">
             <h1 className="text-lg font-bold border-b p-5">Dashboard</h1>
-            <h4 className="uppercase m-5 font-semibold">Clientes</h4>
+            <div className="flex justify-between items-center mb-2">
+                <h4 className="uppercase m-5 font-semibold">Clientes</h4>
+                <Button
+                    variant="outline"
+                    className="font-bold p-2"
+                    asChild
+                >
+                    <Link href="/new-client">
+                        Novo cliente
+                    </Link>
+                </Button>
+            </div>
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y border border-gray-500">
                     <thead className="bg-gray-950 text-white">
@@ -62,7 +75,7 @@ const Dashboard = async () => {
                             <tr className="text-sm text-gray-400" key={client.id}>
                                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.name}</td>
                                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.fantasyName}</td>
-                                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.request.length}</td>
+                                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
                             </tr>
                         ))}
                     </tbody>
@@ -83,13 +96,13 @@ const Dashboard = async () => {
                     </thead>
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
                         {clients.map((client) =>
-                            client.request.map((request) => (
-                                <tr className="text-sm text-gray-400" key={request.id}>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{String(request.id).slice(-4)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{request.client.fantasyName}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatDate(request.createdAt)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatPercentage(request.discount)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatCurrency(request.totalValue)}</td>
+                            client.orders.map((orders) => (
+                                <tr className="text-sm text-gray-400" key={orders.id}>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{String(orders.id).slice(-4)}</td>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{orders.client.fantasyName}</td>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatDate(orders.createdAt)}</td>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatPercentage(orders.discount)}</td>
+                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatCurrency(orders.totalValue)}</td>
                                 </tr>
                             ))
                         )}

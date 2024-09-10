@@ -19,22 +19,24 @@ model User {
 }
 
 model Client {
-  id            String   @id @default(cuid())
-  name          String?
-  email         String?
-  phone         String?
-  address       String?
-  city          String?
-  state         String?
-  fantasyName   String?
-  corporateName String?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id             String   @id @default(cuid())
+  name           String?
+  email          String?
+  phone          String?
+  address        String?
+  district       String?
+  city           String?
+  zipCode        String?
+  referencePoint String?
+  fantasyName    String?
+  corporateName  String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
-  request Request[]
+  orders Orders[]
 }
 
-model Request {
+model Orders {
   id         String   @id @default(cuid())
   client     Client   @relation(fields: [clientId], references: [id])
   clientId   String

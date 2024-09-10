@@ -6,6 +6,7 @@ import React from "react";
 import Dashboard from "./_components/dashboard";
 
 export default function Home() {
+  // TODO: Implement authentication
   const isSignedIn = true;
 
   return (
