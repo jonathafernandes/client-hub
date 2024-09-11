@@ -1,4 +1,3 @@
-// Dashboard.tsx
 import React from "react";
 import { db } from "../_lib/prisma";
 import { Button } from "./ui/button";
@@ -31,8 +30,16 @@ const Dashboard = async () => {
                             fantasyName: true,
                         },
                     },
+                    products: true,
                 },
             },
+        },
+    });
+
+    const products = await db.product.findMany({
+        select: {
+            name: true,
+            price: true,
         },
     });
 
@@ -56,7 +63,7 @@ const Dashboard = async () => {
     };
 
     return (
-        <div className="text-sm mb-16 px-4 sm:px-6 lg:px-8">
+        <div className="text-sm mb-16 px-4 lg:px-8">
             <h1 className="text-lg font-bold border-b p-5">Dashboard</h1>
             <div className="flex justify-between items-center mb-2">
                 <h4 className="uppercase m-5 font-semibold">Clientes</h4>
@@ -74,14 +81,14 @@ const Dashboard = async () => {
                 <table className="min-w-full divide-y border border-gray-500">
                     <thead className="bg-gray-950 text-white">
                         <tr className="text-left text-xs font-medium uppercase tracking-wider">
-                            <th className="px-4 py-3 sm:px-6">Nome</th>
-                            <th className="px-4 py-3 sm:px-6">Nome fantasia</th>
-                            <th className="px-4 py-3 sm:px-6">Pedidos</th>
+                            <th className="px-4 py-3">Nome</th>
+                            <th className="px-4 py-3">Nome fantasia</th>
+                            <th className="px-4 py-3">Pedidos</th>
                         </tr>
                     </thead>
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
                         {clients.map((client) => (
-                            <ClientItem key={client.id} client={client} />
+                            <ClientItem key={client.id} client={client} products={products} />
                         ))}
                     </tbody>
                 </table>
@@ -92,22 +99,30 @@ const Dashboard = async () => {
                 <table className="min-w-full divide-y border border-gray-500">
                     <thead className="bg-gray-950 text-white">
                         <tr className="text-left text-xs font-medium uppercase tracking-wider">
-                            <th className="px-4 py-3 sm:px-6">Número</th>
-                            <th className="px-4 py-3 sm:px-6">Cliente</th>
-                            <th className="px-4 py-3 sm:px-6">Data</th>
-                            <th className="px-4 py-3 sm:px-6">Desconto</th>
-                            <th className="px-4 py-3 sm:px-6">Valor</th>
+                            <th className="px-4 py-3">Número</th>
+                            <th className="px-4 py-3">Cliente</th>
+                            <th className="px-4 py-3">Data</th>
+                            <th className="px-4 py-3">Desconto</th>
+                            <th className="px-4 py-3">Valor</th>
+                            <th className="px-4 py-3">Produtos</th>
                         </tr>
                     </thead>
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
                         {clients.flatMap((client) =>
                             client.orders.map((order) => (
                                 <tr className="text-sm text-gray-400" key={order.id}>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{String(order.id).slice(-4)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{order.client.fantasyName ?? 'N/A'}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatDate(order.createdAt)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatPercentage(order.discount)}</td>
-                                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap">{String(order.id).slice(-4)}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap">{order.client.fantasyName ?? 'N/A'}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap">{formatPercentage(order.discount)}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
+                                    <td className="px-4 whitespace-nowrap uppercase flex flex-wrap gap-1 my-1">
+                                        {order.products.map(product =>
+                                            <span key={product.id} className="p-1 text-[9px]">
+                                                {product.name}
+                                            </span>
+                                        )}
+                                    </td>
                                 </tr>
                             ))
                         )}

@@ -34,6 +34,12 @@
 
     --radius: 0.5rem;
   }
+
+  .custom-font {
+    font-family: 'Mono', sans-serif;
+    font-size: 14px;
+  }
+  
 }
 
 @layer base {

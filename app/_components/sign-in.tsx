@@ -3,7 +3,7 @@ import { Button } from "./ui/button"
 import React from "react"
 import { Card, CardContent } from "./ui/card";
 
-const SignInDialog = () => {
+const SignIn = () => {
   return (
     <Card className="bg-card mx-4 mt-8 rounded-sm">
       <CardContent className="flex flex-col items-center">
@@ -25,4 +25,4 @@ const SignInDialog = () => {
   )
 }
 
-export default SignInDialog;
+export default SignIn;

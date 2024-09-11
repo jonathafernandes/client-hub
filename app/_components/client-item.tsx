@@ -1,7 +1,11 @@
-import React from "react";
+"use client"
+
+import React, { useState } from "react";
 import { Prisma } from "@prisma/client";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Button } from "./ui/button";
+import { Dialog } from "./ui/dialog";
+import NewOrderDialog from "./new-order-dialog";
 
 type ClientWithOrders = Prisma.ClientGetPayload<{
     select: {
@@ -32,11 +36,23 @@ type ClientWithOrders = Prisma.ClientGetPayload<{
     };
 }>;
 
+type Products = Prisma.ProductGetPayload<{
+    select: {
+        name: true;
+        price: true;
+    };
+}>;
+
 interface ClientItemProps {
     client: ClientWithOrders;
+    products: Products[];
 }
 
-const ClientItem: React.FC<ClientItemProps> = ({ client }) => {
+const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const openDialog = () => setIsDialogOpen(true);
+
     const formatCurrency = (value: Prisma.Decimal | null) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
@@ -79,20 +95,23 @@ const ClientItem: React.FC<ClientItemProps> = ({ client }) => {
 
                         <div className="border-t pt-3 mb-3 flex items-center justify-between">
                             <h3 className="font-semibold">Pedidos recentes</h3>
-                            <Button variant="default" className="font-bold p-2">
+                            <Button variant="default" className="font-bold p-2" onClick={openDialog}>
                                 Novo pedido
                             </Button>
+                            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                                <NewOrderDialog products={products} />
+                            </Dialog>
                         </div>
                         <div className="overflow-x-auto">
-                            <table className="min-w-full divide-y divide-gray-200">
-                                <thead className="bg-gray-50">
+                            <table className="min-w-full divide-y divide-gray-400">
+                                <thead className="bg-gray-200">
                                     <tr>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Numero</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
                                         <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-white divide-y text-gray-500 divide-gray-200">
+                                <tbody className="bg-gray-100 divide-y text-gray-500 divide-gray-300">
                                     {client.orders.slice(0, 5).map((order) => (
                                         <tr key={order.id}>
                                             <td className="px-6 py-4 whitespace-nowrap">{String(order.id).slice(-4)}</td>
