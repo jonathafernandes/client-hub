@@ -30,7 +30,13 @@ const Dashboard = async () => {
                             fantasyName: true,
                         },
                     },
-                    products: true,
+                    products: {
+                        select: {
+                            name: true,
+                            id: true,
+                            price: true,
+                        }
+                    },
                 },
             },
         },
@@ -38,6 +44,7 @@ const Dashboard = async () => {
 
     const products = await db.product.findMany({
         select: {
+            id: true,
             name: true,
             price: true,
         },
@@ -104,7 +111,6 @@ const Dashboard = async () => {
                             <th className="px-4 py-3">Data</th>
                             <th className="px-4 py-3">Desconto</th>
                             <th className="px-4 py-3">Valor</th>
-                            <th className="px-4 py-3">Produtos</th>
                         </tr>
                     </thead>
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
@@ -116,13 +122,6 @@ const Dashboard = async () => {
                                     <td className="px-4 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
                                     <td className="px-4 py-4 whitespace-nowrap">{formatPercentage(order.discount)}</td>
                                     <td className="px-4 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
-                                    <td className="px-4 whitespace-nowrap uppercase flex flex-wrap gap-1 my-1">
-                                        {order.products.map(product =>
-                                            <span key={product.id} className="p-1 text-[9px]">
-                                                {product.name}
-                                            </span>
-                                        )}
-                                    </td>
                                 </tr>
                             ))
                         )}

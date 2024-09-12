@@ -38,6 +38,7 @@ type ClientWithOrders = Prisma.ClientGetPayload<{
 
 type Products = Prisma.ProductGetPayload<{
     select: {
+        id: true;
         name: true;
         price: true;
     };
@@ -99,7 +100,7 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                                 Novo pedido
                             </Button>
                             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                                <NewOrderDialog products={products} />
+                                <NewOrderDialog products={products} clientId={client.id} />
                             </Dialog>
                         </div>
                         <div className="overflow-x-auto">

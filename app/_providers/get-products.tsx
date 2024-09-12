@@ -5,6 +5,7 @@ import NewOrderDialogClient from "../_components/new-order-dialog";
 export const NewOrderDialogServer = async () => {
     const products = await db.product.findMany({
         select: {
+            id: true,
             name: true,
             price: true,
         },
@@ -27,5 +28,5 @@ export const NewOrderDialogServer = async () => {
     });
     console.log("🚀 ~ NewOrderDialogServer ~ orders:", orders)
     
-    return <NewOrderDialogClient products={products} />;
+    return <NewOrderDialogClient products={products} clientId={""} />;
 };
