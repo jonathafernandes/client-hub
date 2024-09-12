@@ -17,14 +17,19 @@ export default function Home() {
           <Dashboard />
         ) : (
           <>
-            <p className="text-gray-300 mt-4 text-center">Gerencie seus clientes.</p><div className="text-center text-gray-300">
-              <p className="text-center text-gray-500 mt-2">
-                Aqui você pode gerenciar seus clientes de forma simples e eficiente.
-              </p>
+            <div className="text-center text-gray-300 mb-4">
               <h1 className="text-2xl font-bold mt-10 mb-2">Bem-vindo(a) ao ClientHub!</h1>
               <p>Comece a usar.</p>
             </div>
+
             <SignIn />
+
+            <p className="text-gray-300 mt-16 text-center">
+              Gerencie seus clientes.
+            </p>
+            <p className="text-center text-gray-500 mt-2">
+              Aqui você pode gerenciar seus clientes de forma simples e eficiente.
+            </p>
           </>
         )}
       </main>

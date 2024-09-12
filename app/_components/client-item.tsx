@@ -84,7 +84,7 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
                 <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
                     <div className="mt-6">
-                        <div className="mb-4 flex items-center gap-4">
+                        <div className="mb-4 flex items-center gap-4 border-b pb-4">
                             <h2 className="text-xl font-bold">{client.name}</h2>
                             <Badge className="bg-gray-800 border">
                                 00{client.registerNumber}
@@ -123,7 +123,7 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                                 <tbody className="bg-gray-100 divide-y text-gray-500 divide-gray-300">
                                     {client.orders.slice(0, 5).map((order) => (
                                         <tr key={order.id}>
-                                            <td className="px-6 py-4 whitespace-nowrap">{String(order.id).slice(-4)}</td>
+                                            <td className="px-6 py-4 whitespace-nowrap">00{order.registerNumber}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
                                             <td className="px-6 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
                                         </tr>

@@ -5,7 +5,7 @@ import { Card, CardContent } from "./ui/card";
 
 const SignIn = () => {
   return (
-    <Card className="bg-card mx-4 mt-8 rounded-sm">
+    <Card className="bg-card p-4 m-8 rounded-sm sm:w-1/2 sm:my-0 sm:mx-auto">
       <CardContent className="flex flex-col items-center">
         <p className="text-gray-300">
           Faça o login na plataforma
