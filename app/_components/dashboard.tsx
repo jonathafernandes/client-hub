@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import Link from "next/link";
 import ClientItem from "./client-item";
 import { Prisma } from "@prisma/client";
+import OrderFile from "./order-file";
 
 const Dashboard = async () => {
     const clients = await db.client.findMany({
@@ -19,12 +20,18 @@ const Dashboard = async () => {
             zipCode: true,
             corporateName: true,
             referencePoint: true,
+            registerNumber: true,
+            createdAt: true,
+            updatedAt: true,
             orders: {
                 select: {
                     id: true,
                     totalValue: true,
                     discount: true,
                     createdAt: true,
+                    updatedAt: true,
+                    clientId: true,
+                    registerNumber: true,
                     client: {
                         select: {
                             fantasyName: true,
@@ -32,9 +39,11 @@ const Dashboard = async () => {
                     },
                     products: {
                         select: {
-                            name: true,
                             id: true,
+                            name: true,
                             price: true,
+                            createdAt: true,
+                            updatedAt: true,
                         }
                     },
                 },
@@ -111,17 +120,21 @@ const Dashboard = async () => {
                             <th className="px-4 py-3">Data</th>
                             <th className="px-4 py-3">Desconto</th>
                             <th className="px-4 py-3">Valor</th>
+                            <th className="px-4 py-3">Baixar</th>
                         </tr>
                     </thead>
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
                         {clients.flatMap((client) =>
                             client.orders.map((order) => (
                                 <tr className="text-sm text-gray-400" key={order.id}>
-                                    <td className="px-4 py-4 whitespace-nowrap">{String(order.id).slice(-4)}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap">00{order.registerNumber}</td>
                                     <td className="px-4 py-4 whitespace-nowrap">{order.client.fantasyName ?? 'N/A'}</td>
                                     <td className="px-4 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
                                     <td className="px-4 py-4 whitespace-nowrap">{formatPercentage(order.discount)}</td>
                                     <td className="px-4 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
+                                    <td className="px-4 py-4 whitespace-nowrap">
+                                        <OrderFile order={order} products={order.products} client={client} />
+                                    </td>
                                 </tr>
                             ))
                         )}

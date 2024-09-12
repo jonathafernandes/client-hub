@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { Prisma } from "@prisma/client";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
 import { Dialog } from "./ui/dialog";
 import NewOrderDialog from "./new-order-dialog";
 
@@ -20,12 +21,14 @@ type ClientWithOrders = Prisma.ClientGetPayload<{
         zipCode: true;
         corporateName: true;
         referencePoint: true;
+        registerNumber: true;
         orders: {
             select: {
                 id: true;
                 totalValue: true;
                 discount: true;
                 createdAt: true;
+                registerNumber: true;
                 client: {
                     select: {
                         fantasyName: true;
@@ -44,7 +47,7 @@ type Products = Prisma.ProductGetPayload<{
     };
 }>;
 
-interface ClientItemProps {
+export interface ClientItemProps {
     client: ClientWithOrders;
     products: Products[];
 }
@@ -81,7 +84,12 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
                 <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
                     <div className="mt-6">
-                        <h2 className="text-xl font-bold mb-4">{client.name}</h2>
+                        <div className="mb-4 flex items-center gap-4">
+                            <h2 className="text-xl font-bold">{client.name}</h2>
+                            <Badge className="bg-gray-800 border">
+                                00{client.registerNumber}
+                            </Badge>
+                        </div>
                         <p className="mb-2"><strong>Nome Fantasia:</strong> {client.fantasyName ?? 'N/A'}</p>
                         <p className="mb-2"><strong>Razão Social:</strong> {client.corporateName ?? 'N/A'}</p>
                         <p className="mb-2"><strong>Endereço:</strong> {client.address ?? 'N/A'}</p>
