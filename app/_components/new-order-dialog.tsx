@@ -16,6 +16,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
     const [selectedProducts, setSelectedProducts] = useState<NewOrderDialog[]>([]);
     const [currentProduct, setCurrentProduct] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [selectedDiscount, setSelectedDiscount] = useState<number>(0); // Estado para o desconto
 
     console.log("Props recebidas em NewOrderDialog:", { products, clientId });
 
@@ -27,7 +28,9 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
     }, [products]);
 
     const calculateTotal = () => {
-        return selectedProducts.reduce((total, product) => total + Number(product.price), 0);
+        const subtotal = selectedProducts.reduce((total, product) => total + Number(product.price), 0);
+        const discountAmount = (subtotal * selectedDiscount) / 100;
+        return subtotal - discountAmount;
     };
 
     const handleAddProduct = () => {
@@ -38,7 +41,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
         } else {
             console.error('Produto não encontrado ou sem ID:', currentProduct, productToAdd);
         }
-    };    
+    };
 
     const handleRemoveProduct = (index: number) => {
         setSelectedProducts(prev => prev.filter((_, i) => i !== index));
@@ -49,9 +52,9 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
             console.log('Nenhum produto selecionado ou clientId inválido');
             return;
         }
-    
+
         console.log("Produtos selecionados antes do envio:", selectedProducts);
-    
+
         setIsSubmitting(true);
         try {
             const orderProducts = selectedProducts.map((product, index) => {
@@ -61,9 +64,9 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                 }
                 return { id: product.id };
             });
-    
+
             console.log("Produtos preparados para envio:", orderProducts);
-    
+
             const response = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
@@ -72,14 +75,15 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                 body: JSON.stringify({
                     clientId,
                     products: orderProducts,
+                    discount: selectedDiscount,
                 }),
             });
-    
+
             if (!response.ok) {
                 const errorText = await response.text();
                 throw new Error(`Erro ao salvar o pedido: ${response.statusText}. Detalhes: ${errorText}`);
             }
-    
+
             const data = await response.json();
             alert('Pedido salvo com sucesso!');
             console.log('Resposta da API:', data);
@@ -89,7 +93,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
         } finally {
             setIsSubmitting(false);
         }
-    };    
+    };
 
     return (
         <DialogContent className="p-4 rounded-sm font-[family-name:var(--font-geist-sans)] max-h-[90%] w-11/12 overflow-x-auto">
@@ -126,6 +130,20 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                                     </li>
                                 ))}
                             </ul>
+                            <div className="flex space-x-2 mt-4">
+                                <label htmlFor="discount" className="text-sm font-semibold">Desconto:</label>
+                                <select
+                                    id="discount"
+                                    className="discount-select flex-grow custom-font bg-slate-900 p-2 rounded-sm border"
+                                    value={selectedDiscount}
+                                    onChange={(e) => setSelectedDiscount(Number(e.target.value))}
+                                >
+                                    <option value={0}>Sem desconto</option>
+                                    <option value={5}>5% de desconto</option>
+                                    <option value={10}>10% de desconto</option>
+                                    <option value={15}>15% de desconto</option>
+                                </select>
+                            </div>
                             <div className="mt-8 text-right">
                                 <h3 className="text-sm font-semibold">Total:</h3>
                                 <p className="text-lg font-bold">R${calculateTotal().toLocaleString('pt-BR')}</p>

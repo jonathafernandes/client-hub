@@ -85,7 +85,7 @@ const Dashboard = async () => {
             <div className="flex justify-between items-center mb-2">
                 <h4 className="uppercase m-5 font-semibold">Clientes</h4>
                 <Button
-                    variant="outline"
+                    variant="default"
                     className="font-bold p-2"
                     asChild
                 >
@@ -98,9 +98,9 @@ const Dashboard = async () => {
                 <table className="min-w-full divide-y border border-gray-500">
                     <thead className="bg-gray-950 text-white">
                         <tr className="text-left text-xs font-medium uppercase tracking-wider">
-                            <th className="px-4 py-3">Nome</th>
-                            <th className="px-4 py-3">Nome fantasia</th>
-                            <th className="px-4 py-3">Pedidos</th>
+                            <th className="px-4 py-3 w-1/12">Nome</th>
+                            <th className="px-4 py-3 w-1/12">Nome fantasia</th>
+                            <th className="px-4 py-3 w-1/12">Pedidos</th>
                         </tr>
                     </thead>
                     <tbody className="bg-gray-900 divide-y divide-gray-700">
