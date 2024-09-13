@@ -20,7 +20,6 @@ const OrderFile = ({ order, products, client }: OrderFileProps) => {
         const appName = "ClientHub";
         const pageWidth = doc.internal.pageSize.width;
 
-        // Definir fonte padrão
         doc.setFont('courier', 'normal');
         doc.setFontSize(14);
         doc.text(appName, pageWidth - 20, 20, { align: "right" });
