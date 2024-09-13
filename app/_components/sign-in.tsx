@@ -1,9 +1,14 @@
+"use client"
+
 import Image from "next/image"
 import { Button } from "./ui/button"
 import React from "react"
 import { Card, CardContent } from "./ui/card";
+import { signIn } from "next-auth/react";
 
 const SignIn = () => {
+  const handleLoginWithGoogle = () => signIn("google");
+
   return (
     <Card className="bg-card p-4 m-8 rounded-sm sm:w-1/2 sm:my-0 sm:mx-auto">
       <CardContent className="flex flex-col items-center">
@@ -16,6 +21,7 @@ const SignIn = () => {
         <Button
           variant="outline"
           className="gap-1 flex justify-center font-bold p-2 w-full"
+          onClick={handleLoginWithGoogle}
         >
           <Image src="/google.svg" alt="Google" width={18} height={18} />
           Entrar com Google

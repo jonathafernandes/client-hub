@@ -27,7 +27,7 @@ export default function Home() {
             <p className="text-gray-300 mt-16 text-center">
               Gerencie seus clientes.
             </p>
-            <p className="text-center text-gray-500 mt-2">
+            <p className="text-center text-gray-500 m-2">
               Aqui você pode gerenciar seus clientes de forma simples e eficiente.
             </p>
           </>
