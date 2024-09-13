@@ -20,6 +20,7 @@ type ClientWithOrders = Prisma.ClientGetPayload<{
         district: true;
         zipCode: true;
         corporateName: true;
+        cnpjOrCpf: true;
         referencePoint: true;
         registerNumber: true;
         orders: {
@@ -92,6 +93,7 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                         </div>
                         <p className="mb-2"><strong>Nome Fantasia:</strong> {client.fantasyName ?? 'N/A'}</p>
                         <p className="mb-2"><strong>Razão Social:</strong> {client.corporateName ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>CNPJ/CPF:</strong> {client.cnpjOrCpf ?? 'N/A'}</p>
                         <p className="mb-2"><strong>Endereço:</strong> {client.address ?? 'N/A'}</p>
                         <p className="mb-2"><strong>Bairro:</strong> {client.district ?? 'N/A'}</p>
                         <p className="mb-2"><strong>Cidade:</strong> {client.city ?? 'N/A'}</p>

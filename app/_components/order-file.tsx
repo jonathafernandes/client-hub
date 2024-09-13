@@ -37,12 +37,13 @@ const OrderFile = ({ order, products, client }: OrderFileProps) => {
         doc.text(`Data: ${new Date(order.createdAt).toLocaleDateString()}`, 20, 40);
         doc.text(`Cliente: ${client.name} - 00${client.registerNumber}`, 20, 60);
         doc.text(`Empresa: ${client.fantasyName} - ${client.corporateName}`, 20, 70);
-        doc.text(`${client.address}. ${client.district} - ${client.city}`, 20, 80);
-        doc.text(`Ponto de referência: ${client.referencePoint}`, 20, 90);
-        doc.text(`Telefone: ${client.phone}`, 20, 100);
+        doc.text(`CNPJ/CPF: ${client.cnpjOrCpf}`, 20, 80);
+        doc.text(`${client.address}. ${client.district} - ${client.city}`, 20, 90);
+        doc.text(`Ponto de referência: ${client.referencePoint}`, 20, 100);
+        doc.text(`Telefone: ${client.phone}`, 20, 110);
 
         autoTable(doc, {
-            startY: 110,
+            startY: 120,
             head: [['PRODUTO', 'PREÇO']],
             body: products.map(product => [product.name?.toUpperCase() || '', `R$${product.price}`]),
             theme: 'striped',

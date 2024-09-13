@@ -72,6 +72,7 @@ model Client {
   referencePoint String?
   fantasyName    String?
   corporateName  String?
+  cnpjOrCpf      String?
   createdAt      DateTime @default(now())
   updatedAt      DateTime @updatedAt
   registerNumber Int      @unique @default(autoincrement())

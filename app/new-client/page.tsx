@@ -23,6 +23,7 @@ const NewClientPage = () => {
                 zipCode: data.zipCode ?? "",
                 district: data.district ?? "",
                 city: data.city ?? "",
+                cnpjOrCpf: data.cnpjOrCpf ?? "",
             });
 
             setTimeout(() => {
@@ -77,12 +78,24 @@ const NewClientPage = () => {
                 </div>
 
                 <div className="mb-4">
-                    <label htmlFor="number" className="block text-sm font-medium text-gray-300">
-                        Número
+                    <label htmlFor="cnpjOrCpf" className="block text-sm font-medium text-gray-300">
+                       CPF/CNPJ
                     </label>
                     <input
                         type="text"
-                        id="number"
+                        id="cnpjOrCpf"
+                        {...register("cnpjOrCpf")}
+                        className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                    />
+                </div>
+
+                <div className="mb-4">
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-300">
+                        Telefone
+                    </label>
+                    <input
+                        type="text"
+                        id="phone"
                         {...register("phone")}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
                     />

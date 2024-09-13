@@ -20,6 +20,7 @@ const Dashboard = async () => {
             zipCode: true,
             corporateName: true,
             referencePoint: true,
+            cnpjOrCpf: true,
             registerNumber: true,
             createdAt: true,
             updatedAt: true,

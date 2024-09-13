@@ -13,6 +13,7 @@ export interface ClientParams {
     city?: string;
     district?: string;
     zipCode?: string;
+    cnpjOrCpf?: string;
 }
 
 export const saveClient = async (params: ClientParams) => {
