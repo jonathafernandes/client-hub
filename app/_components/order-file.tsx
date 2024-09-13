@@ -19,13 +19,23 @@ const OrderFile = ({ order, products, client }: OrderFileProps) => {
 
         const appName = "ClientHub";
         const pageWidth = doc.internal.pageSize.width;
+
+        // Definir fonte padrão
+        doc.setFont('courier', 'normal');
         doc.setFontSize(14);
         doc.text(appName, pageWidth - 20, 20, { align: "right" });
 
-        doc.setFontSize(14);
+        doc.setFillColor(162, 11, 21);  
+        doc.rect(20, 25, pageWidth - 40, 10, 'F'); 
+
+        doc.setTextColor(255, 255, 255);
+
+        doc.setFont('helvetica', 'normal');
         doc.text(`PEDIDO 00${order.registerNumber}`, 20, 30);
+
+        doc.setFont('courier', 'normal');
+        doc.setTextColor(0, 0, 0);
         doc.text(`Data: ${new Date(order.createdAt).toLocaleDateString()}`, 20, 40);
-        
         doc.text(`Cliente: ${client.name} - 00${client.registerNumber}`, 20, 60);
         doc.text(`Empresa: ${client.fantasyName} - ${client.corporateName}`, 20, 70);
         doc.text(`${client.address}. ${client.district} - ${client.city}`, 20, 80);
@@ -35,12 +45,16 @@ const OrderFile = ({ order, products, client }: OrderFileProps) => {
         autoTable(doc, {
             startY: 110,
             head: [['PRODUTO', 'PREÇO']],
-            body: products.map(product => [product.name, `R$${product.price}`]),
+            body: products.map(product => [product.name?.toUpperCase() || '', `R$${product.price}`]),
             theme: 'striped',
             margin: { left: 20, right: 20 },
-            headStyles: { fillColor: [162, 11, 21] },
+            headStyles: { 
+                fillColor: [220, 220, 255],
+                textColor: [0, 0, 0]
+            },
             didDrawPage: (data) => {
                 if (data.cursor) {
+                    doc.setFont('helvetica', 'bold');
                     doc.text(`TOTAL: R$${order.totalValue}`, 20, data.cursor.y + 10);
                 }
             }

@@ -40,7 +40,7 @@ const NewClientPage = () => {
         <div className="flex flex-col min-h-screen font-[family-name:var(--font-geist-sans)]">
             <Header />
             <h1 className="text-lg font-bold border-b p-5">Novo cliente</h1>
-            <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg p-6">
+            <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg p-6 my-0 mx-auto">
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-300">
                         Nome
