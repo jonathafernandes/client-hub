@@ -4,16 +4,17 @@ import SignIn from "./_components/sign-in";
 
 import React from "react";
 import Dashboard from "./_components/dashboard";
+import { authOptions } from "./_lib/auth";
+import { getServerSession } from "next-auth";
 
-export default function Home() {
-  // TODO: Implement authentication
-  const isSignedIn = true;
+export default async function Home() {
+  const session = await getServerSession(authOptions);
 
   return (
     <div className="flex flex-col min-h-screen font-[family-name:var(--font-geist-sans)]">
       <Header />
       <main className="flex-grow">
-        {isSignedIn ? (
+        {session?.user ? (
           <Dashboard />
         ) : (
           <>
