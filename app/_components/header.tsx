@@ -6,6 +6,7 @@ import { House } from "lucide-react";
 import { Button } from "./ui/button";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../_lib/auth";
+import LogOut from "./logout";
 
 
 const Header = async () => {
@@ -24,16 +25,19 @@ const Header = async () => {
                                 </span>
                             </div>
                         </Link>
-                        <Link href="/">
-                            <Button variant="ghost" className="p-2" asChild>
-                                <div className="flex items-center gap-2">
-                                    <House size={16} />
-                                    <span>
-                                        Início
-                                    </span>
-                                </div>
-                            </Button>
-                        </Link>
+                        <div>
+                            <Link href="/">
+                                <Button variant="ghost" className="p-2" asChild>
+                                    <div className="flex items-center gap-2">
+                                        <House size={16} />
+                                        <span>
+                                            Início
+                                        </span>
+                                    </div>
+                                </Button>
+                            </Link>
+                            <LogOut />
+                        </div>
                     </CardContent>
                 ) : (
                     <CardContent className="py-5 sm:px-16">

@@ -94,6 +94,13 @@ const Dashboard = async () => {
                     </Link>
                 </Button>
             </div>
+            {/* TODO: Implementar pesquisa pelo cliente */}
+            {/* <div className="flex items-center gap-2 mb-4">
+                <input placeholder="Pesquise pelo cliente..." className="bg-gray-950 block w-full sm:w-1/2 px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+                <Button variant="default">
+                    <SearchIcon size={20} />
+                </Button>
+            </div> */}
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y border border-gray-500">
                     <thead className="bg-gray-950 text-white">
@@ -112,6 +119,13 @@ const Dashboard = async () => {
             </div>
 
             <h4 className="uppercase m-5 font-semibold">Pedidos</h4>
+            {/* TODO: Implementar pesquisa pelo pedido */}
+            {/* <div className="flex items-center gap-2 mb-4">
+                <input placeholder="Pesquise pelo número do pedido..." className="bg-gray-950 block w-full sm:w-1/2 px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
+                <Button variant="default">
+                    <SearchIcon size={20} />
+                </Button>
+            </div> */}
             <div className="overflow-x-auto">
                 <table className="min-w-full divide-y border border-gray-500">
                     <thead className="bg-gray-950 text-white">
