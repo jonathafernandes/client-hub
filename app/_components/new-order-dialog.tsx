@@ -16,7 +16,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
     const [selectedProducts, setSelectedProducts] = useState<NewOrderDialog[]>([]);
     const [currentProduct, setCurrentProduct] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [selectedDiscount, setSelectedDiscount] = useState<number>(0); // Estado para o desconto
+    const [selectedDiscount, setSelectedDiscount] = useState<number>(0);
 
     console.log("Props recebidas em NewOrderDialog:", { products, clientId });
 

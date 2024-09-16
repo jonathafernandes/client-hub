@@ -78,7 +78,7 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
             <Sheet>
                 <SheetTrigger asChild>
                     <td className="px-4 py-4 sm:px-6 whitespace-nowrap cursor-pointer hover:bg-gray-800">
-                        {client.name ?? 'N/A'}
+                        {client.name}
                     </td>
                 </SheetTrigger>
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.fantasyName ?? 'N/A'}</td>
@@ -91,16 +91,16 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                                 00{client.registerNumber}
                             </Badge>
                         </div>
-                        <p className="mb-2"><strong>Nome Fantasia:</strong> {client.fantasyName ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>Razão Social:</strong> {client.corporateName ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>CNPJ/CPF:</strong> {client.cnpjOrCpf ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>Endereço:</strong> {client.address ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>Bairro:</strong> {client.district ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>Cidade:</strong> {client.city ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>CEP:</strong> {client.zipCode ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>Ponto de referência:</strong> {client.referencePoint ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>E-mail:</strong> {client.email ?? 'N/A'}</p>
-                        <p className="mb-2"><strong>Telefone:</strong> {client.phone ?? 'N/A'}</p>
+                        <p className="mb-2"><strong>Nome Fantasia:</strong> {client.fantasyName}</p>
+                        <p className="mb-2"><strong>Razão Social:</strong> {client.corporateName}</p>
+                        <p className="mb-2"><strong>CNPJ/CPF:</strong> {client.cnpjOrCpf}</p>
+                        <p className="mb-2"><strong>Endereço:</strong> {client.address}</p>
+                        <p className="mb-2"><strong>Bairro:</strong> {client.district}</p>
+                        <p className="mb-2"><strong>Cidade:</strong> {client.city}</p>
+                        <p className="mb-2"><strong>CEP:</strong> {client.zipCode}</p>
+                        <p className="mb-2"><strong>Ponto de referência:</strong> {client.referencePoint}</p>
+                        <p className="mb-2"><strong>E-mail:</strong> {client.email}</p>
+                        <p className="mb-2"><strong>Telefone:</strong> {client.phone}</p>
 
                         <p className="mb-4"><strong>Número de pedidos:</strong> {client.orders.length}</p>
 
@@ -115,19 +115,19 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                         </div>
                         <div className="overflow-x-auto">
                             <table className="min-w-full divide-y divide-gray-400">
-                                <thead className="bg-gray-200">
+                                <thead className="bg-gray-200 text-xs">
                                     <tr>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Numero</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Data</th>
-                                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Valor</th>
+                                        <th className="px-2 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Numero</th>
+                                        <th className="px-2 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Data</th>
+                                        <th className="px-2 py-3 text-left font-medium text-gray-500 uppercase tracking-wider">Valor</th>
                                     </tr>
                                 </thead>
-                                <tbody className="bg-gray-100 divide-y text-gray-500 divide-gray-300">
-                                    {client.orders.slice(0, 5).map((order) => (
+                                <tbody className="bg-gray-100 divide-y text-gray-500 divide-gray-300 text-xs">
+                                    {client.orders.map((order) => (
                                         <tr key={order.id}>
-                                            <td className="px-6 py-4 whitespace-nowrap">00{order.registerNumber}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
-                                            <td className="px-6 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
+                                            <td className="px-2 py-4 whitespace-nowrap">00{order.registerNumber}</td>
+                                            <td className="px-2 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
+                                            <td className="px-2 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
