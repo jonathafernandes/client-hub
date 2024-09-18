@@ -1,60 +1,23 @@
-import React from "react";
+'use client';
+
+import React, { useEffect, useState } from "react";
 import ClientItem from "./client-item";
-import { db } from "../_lib/prisma";
+import { getProducts } from "../_actions/get-products";
+import { Client } from "@prisma/client";
 
-const Clients = async () => {
-    const clients = await db.client.findMany({
-        select: {
-            id: true,
-            name: true,
-            fantasyName: true,
-            address: true,
-            city: true,
-            email: true,
-            phone: true,
-            district: true,
-            zipCode: true,
-            corporateName: true,
-            referencePoint: true,
-            cnpjOrCpf: true,
-            registerNumber: true,
-            createdAt: true,
-            updatedAt: true,
-            orders: {
-                select: {
-                    id: true,
-                    totalValue: true,
-                    discount: true,
-                    createdAt: true,
-                    updatedAt: true,
-                    clientId: true,
-                    registerNumber: true,
-                    client: {
-                        select: {
-                            fantasyName: true,
-                        },
-                    },
-                    products: {
-                        select: {
-                            id: true,
-                            name: true,
-                            price: true,
-                            createdAt: true,
-                            updatedAt: true,
-                        }
-                    },
-                },
-            },
-        },
-    });
+interface ClientsProps {
+    clients: Client[];
+}
 
-    const products = await db.product.findMany({
-        select: {
-            id: true,
-            name: true,
-            price: true,
-        },
-    });
+const Clients =  ({ clients }: ClientsProps) => {
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        getProducts().then((products) => {
+            setProducts(products);
+        });
+    }
+    , []);
     return (
         <>
             {/* TODO: Implementar pesquisa pelo cliente */}
@@ -64,7 +27,7 @@ const Clients = async () => {
                 <SearchIcon size={20} />
                 </Button>
                 </div> */}
-            {clients.length === 0 ? (
+            {clients?.length === 0 ? (
                 <div className="text-center text-white p-4">Nenhum cliente encontrado! Clique no botão ao lado para criar um novo cliente.</div>
             ) : (
                 <div className="overflow-x-auto">
@@ -77,7 +40,7 @@ const Clients = async () => {
                             </tr>
                         </thead>
                         <tbody className="bg-gray-900 divide-y divide-gray-700">
-                            {clients.map((client) => (
+                            {clients?.map((client: Client) => (
                                 <ClientItem key={client.id} client={client} products={products} />
                             ))}
                         </tbody>

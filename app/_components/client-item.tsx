@@ -23,7 +23,7 @@ type ClientWithOrders = Prisma.ClientGetPayload<{
         cnpjOrCpf: true;
         referencePoint: true;
         registerNumber: true;
-        orders: {
+        orders?: {
             select: {
                 id: true;
                 totalValue: true;

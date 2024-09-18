@@ -13,7 +13,8 @@ interface OrderItemProps {
 
 const OrderItem = ({ order }: OrderItemProps) => {
     const formatDate = (date: Date) => {
-        return date.toLocaleDateString('pt-BR', {
+        if (!date) return '';
+        return new Date(date).toLocaleDateString('pt-BR', {
             day: '2-digit',
             month: '2-digit',
             year: 'numeric',

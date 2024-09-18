@@ -3,7 +3,7 @@ import { DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Prisma } from "@prisma/client";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
-
+import { useQueryClient } from "@tanstack/react-query";
 type NewOrderDialog = Prisma.ProductGetPayload<{
     select: { id: true; name: true; price: true; }
 }>;
@@ -14,11 +14,12 @@ interface NewOrderDialogProps {
 }
 
 const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
+
     const [selectedProducts, setSelectedProducts] = useState<NewOrderDialog[]>([]);
     const [currentProduct, setCurrentProduct] = useState<string>("");
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedDiscount, setSelectedDiscount] = useState<number>(0);
-
+    const queryClient = useQueryClient();
     useEffect(() => {
         if (products.length > 0 && products[0].name) {
             setCurrentProduct(products[0].name);
@@ -81,6 +82,9 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
             setSelectedProducts([]);
             setCurrentProduct("");
             setSelectedDiscount(0);
+            queryClient.invalidateQueries({
+                queryKey: ['clients'],
+            });
         } catch (error) {
             console.error('Erro ao salvar o pedido:', error);
         } finally {
@@ -103,7 +107,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                     >
                         {products.map((product) => (
                             <option key={product.id} value={product.name || ''}>
-                                {product.name} - R${Number(product.price).toLocaleString('pt-BR')}
+                                {product.name?.toUpperCase()} - R${Number(product.price).toLocaleString('pt-BR')}
                             </option>
                         ))}
                     </select>
@@ -118,7 +122,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                             <ul className="space-y-2">
                                 {selectedProducts.map((product, index) => (
                                     <li key={index} className="flex justify-between items-center">
-                                        <span>{product.name} - R${Number(product.price).toLocaleString('pt-BR')}</span>
+                                        <span className="uppercase">{product.name} - R${Number(product.price).toLocaleString('pt-BR')}</span>
                                         <Button variant="destructive" size="sm" onClick={() => handleRemoveProduct(index)}>Remover</Button>
                                     </li>
                                 ))}

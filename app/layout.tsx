@@ -4,7 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import React from "react";
 import AuthProvider from "./_providers/auth-provider";
-
+import { Provider } from "./_providers/query-client";
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   description: "Gerencie seus clientes de forma simples e eficiente.",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -31,8 +32,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark max-w-7xl mx-auto`}
       >
+
         <AuthProvider>
-          {children}
+          <Provider>
+            {children}
+          </Provider>
           <Toaster />
         </AuthProvider>
       </body>

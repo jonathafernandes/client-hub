@@ -30,7 +30,6 @@ async function handler(req: Request) {
                     },
                 },
             });
-
             return NextResponse.json(order, { status: 201 });
         } catch (error) {
             console.error('Erro ao criar pedido:', error);
