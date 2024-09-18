@@ -7,6 +7,7 @@ import { Button } from "../_components/ui/button";
 import { useForm } from "react-hook-form";
 import { saveClient } from "../_actions/save-client";
 import { ClientParams } from "../_actions/save-client";
+import { toast } from "sonner";
 
 const NewClientPage = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<ClientParams>();
@@ -27,7 +28,7 @@ const NewClientPage = () => {
             });
 
             setTimeout(() => {
-                alert("Cliente cadastrado com sucesso!");
+                toast("Cliente cadastrado com sucesso!");
                 reset();
             }, 500);
         } catch (error) {

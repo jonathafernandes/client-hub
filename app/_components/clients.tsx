@@ -64,22 +64,26 @@ const Clients = async () => {
                 <SearchIcon size={20} />
                 </Button>
                 </div> */}
-            <div className="overflow-x-auto">
-                <table className="min-w-full divide-y border border-gray-500">
-                    <thead className="bg-gray-950 text-white">
-                        <tr className="text-left text-xs font-medium uppercase tracking-wider">
-                            <th className="px-4 py-3 w-1/12">Nome</th>
-                            <th className="px-4 py-3 w-1/12">Nome fantasia</th>
-                            <th className="px-4 py-3 w-1/12">Pedidos</th>
-                        </tr>
-                    </thead>
-                    <tbody className="bg-gray-900 divide-y divide-gray-700">
-                        {clients.map((client) => (
-                            <ClientItem key={client.id} client={client} products={products} />
-                        ))}
-                    </tbody>
-                </table>
-            </div>
+            {clients.length === 0 ? (
+                <div className="text-center text-white p-4">Nenhum cliente encontrado! Clique no botão ao lado para criar um novo cliente.</div>
+            ) : (
+                <div className="overflow-x-auto">
+                    <table className="min-w-full divide-y border border-gray-500">
+                        <thead className="bg-gray-950 text-white">
+                            <tr className="text-left text-xs font-medium uppercase tracking-wider">
+                                <th className="px-4 py-3 w-1/12">Nome</th>
+                                <th className="px-4 py-3 w-1/12">Nome fantasia</th>
+                                <th className="px-4 py-3 w-1/12">Pedidos</th>
+                            </tr>
+                        </thead>
+                        <tbody className="bg-gray-900 divide-y divide-gray-700">
+                            {clients.map((client) => (
+                                <ClientItem key={client.id} client={client} products={products} />
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            )}
         </>
     )
 };

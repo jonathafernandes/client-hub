@@ -1,44 +1,14 @@
 import React from "react";
 import OrderFile from "./order-file";
-import { Prisma } from "@prisma/client";
+import { Client, Orders, Prisma, Product } from "@prisma/client";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Badge } from "./ui/badge";
 
 interface OrderItemProps {
-    order: Prisma.OrdersGetPayload<{
-        select: {
-            id: true;
-            totalValue: true;
-            discount: true;
-            createdAt: true;
-            updatedAt: true;
-            clientId: true;
-            registerNumber: true;
-            client: {
-                select: {
-                    fantasyName: true;
-                    name: true;
-                    email: true;
-                    phone: true;
-                    address: true;
-                    district: true;
-                    city: true;
-                    zipCode: true;
-                    referencePoint: true;
-                    cnpjOrCpf: true;
-                };
-            };
-            products: {
-                select: {
-                    id: true;
-                    name: true;
-                    price: true;
-                    createdAt: true;
-                    updatedAt: true;
-                }
-            },
-        };
-    }>;
+    order: Orders & {
+        products: Product[];
+        client: Client;
+    };        
 }
 
 const OrderItem = ({ order }: OrderItemProps) => {
@@ -72,7 +42,18 @@ const OrderItem = ({ order }: OrderItemProps) => {
                 <td className="px-4 py-4 whitespace-nowrap">{formatPercentage(order.discount)}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
                 <td className="px-4 py-4 whitespace-nowrap">
-                    <OrderFile order={order} products={order.products} client={order.client} />
+                    <OrderFile 
+                        order={order} 
+                        products={order.products} 
+                        client={{
+                            ...order.client,
+                            id: order.clientId,
+                            corporateName: order.client.name,
+                            createdAt: order.createdAt,
+                            updatedAt: order.updatedAt,
+                            registerNumber: order.registerNumber
+                        }} 
+                    />
                 </td>
             </tr>
             <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">

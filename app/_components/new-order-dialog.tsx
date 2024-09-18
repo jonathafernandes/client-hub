@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { Prisma } from "@prisma/client";
 import { Button } from "./ui/button";
+import { toast } from "sonner";
 
 type NewOrderDialog = Prisma.ProductGetPayload<{
     select: { id: true; name: true; price: true; }
@@ -76,10 +77,12 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                 throw new Error(`Erro ao salvar o pedido: ${response.statusText}. Detalhes: ${errorText}`);
             }
 
-            alert('Pedido salvo com sucesso!');
+            toast('Pedido salvo com sucesso!');
+            setSelectedProducts([]);
+            setCurrentProduct("");
+            setSelectedDiscount(0);
         } catch (error) {
             console.error('Erro ao salvar o pedido:', error);
-            alert(`Ocorreu um erro ao salvar o pedido: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
         } finally {
             setIsSubmitting(false);
         }
