@@ -18,13 +18,10 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedDiscount, setSelectedDiscount] = useState<number>(0);
 
-    console.log("Props recebidas em NewOrderDialog:", { products, clientId });
-
     useEffect(() => {
         if (products.length > 0 && products[0].name) {
             setCurrentProduct(products[0].name);
         }
-        console.log("Produtos disponíveis:", products);
     }, [products]);
 
     const calculateTotal = () => {
@@ -36,7 +33,6 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
     const handleAddProduct = () => {
         const productToAdd = products.find(p => p.name === currentProduct);
         if (productToAdd && productToAdd.id) {
-            console.log("Adicionando produto:", productToAdd);
             setSelectedProducts(prev => [...prev, productToAdd]);
         } else {
             console.error('Produto não encontrado ou sem ID:', currentProduct, productToAdd);
@@ -49,11 +45,8 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
 
     const handleSubmitOrder = async () => {
         if (selectedProducts.length === 0 || !clientId) {
-            console.log('Nenhum produto selecionado ou clientId inválido');
             return;
         }
-
-        console.log("Produtos selecionados antes do envio:", selectedProducts);
 
         setIsSubmitting(true);
         try {
@@ -65,8 +58,6 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                 return { id: product.id };
             });
 
-            console.log("Produtos preparados para envio:", orderProducts);
-
             const response = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
@@ -75,6 +66,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                 body: JSON.stringify({
                     clientId,
                     products: orderProducts,
+                    totalValue: calculateTotal(),
                     discount: selectedDiscount,
                 }),
             });
@@ -84,9 +76,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                 throw new Error(`Erro ao salvar o pedido: ${response.statusText}. Detalhes: ${errorText}`);
             }
 
-            const data = await response.json();
             alert('Pedido salvo com sucesso!');
-            console.log('Resposta da API:', data);
         } catch (error) {
             console.error('Erro ao salvar o pedido:', error);
             alert(`Ocorreu um erro ao salvar o pedido: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);

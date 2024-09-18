@@ -1,21 +1,21 @@
+"use client";
+
 import React from "react";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { House } from "lucide-react";
 import { Button } from "./ui/button";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../_lib/auth";
 import LogOut from "./logout";
+import { useSession } from "next-auth/react";
 
-
-const Header = async () => {
-    const session = await getServerSession(authOptions);
+const Header = () => {
+    const { data } = useSession();
 
     return (
         <header>
             <Card className="rounded-sm bg-secondary">
-                {session?.user ? (
+                {data?.user ? (
                     <CardContent className="py-5 sm:px-16 flex items-center justify-between">
                         <Link href="/">
                             <div className="flex flex-col gap-2 items-center">

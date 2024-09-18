@@ -26,11 +26,10 @@ export const saveOrder = async (params: OrderParams) => {
                 },
             },
         });
-        console.log('Pedido salvo com sucesso', result);
         revalidatePath('/dashboard');
-        return result; // Retornar o resultado para ver se a operação foi bem-sucedida
+        return result;
     } catch (error) {
         console.error('Erro ao salvar pedido', error);
-        throw error; // Retornar o erro para ser tratado no frontend
+        throw error;
     }
 };
