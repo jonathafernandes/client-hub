@@ -73,7 +73,7 @@ const OrderItem = ({ order }: OrderItemProps) => {
                         <h3 className="text-md font-semibold mb-2">Produtos</h3>
                         {order.products.map((product) => (
                             <div key={product.id} className="border p-2 mb-2">
-                                <p><strong>Nome: </strong>{product.name}</p>
+                                <p className="uppercase"><strong>Nome: </strong>{product.name}</p>
                                 <p><strong>Preço: </strong>{formatCurrency(product.price)}</p>
                             </div>
                         ))}

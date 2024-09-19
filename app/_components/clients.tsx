@@ -41,7 +41,8 @@ const Clients =  ({ clients }: ClientsProps) => {
                         </thead>
                         <tbody className="bg-gray-900 divide-y divide-gray-700">
                             {clients?.map((client: Client) => (
-                                <ClientItem key={client.id} client={client} products={products} />
+                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                <ClientItem key={client.id} client={client as any} products={products} />
                             ))}
                         </tbody>
                     </table>

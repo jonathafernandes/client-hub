@@ -1,7 +1,7 @@
 import { db } from '../../_lib/prisma';
 import { NextResponse } from "next/server";
 
-export const getClients = async () => {
+export const GET = async () => {
     const clients = await db.client.findMany({
         select: {
             id: true,
@@ -59,11 +59,7 @@ export const getClients = async () => {
                 },
             },
         },
-
-
     });
+
     return NextResponse.json(clients, { status: 201 });
-
 }
-
-export { getClients as GET }
