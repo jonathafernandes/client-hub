@@ -61,5 +61,7 @@ export const GET = async () => {
         },
     });
 
-    return NextResponse.json(clients, { status: 201 });
+    const res = NextResponse.json(clients, { status: 201 });
+    res.headers.set('Cache-Control', 'no-store');
+    return res;
 }

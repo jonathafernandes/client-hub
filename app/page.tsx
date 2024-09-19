@@ -28,7 +28,7 @@ export default async function Home() {
           user?.isAdmin ? (
             <Dashboard />
           ) : (
-            <div className="text-center text-gray-300 mt-[20vh]">
+            <div className="text-center text-gray-300 mt-[20vh] p-4">
               <h1 className="text-2xl font-bold mt-10 mb-2">Acesso restrito!</h1>
               <p>
                 Você não tem permissão para acessar esta área.

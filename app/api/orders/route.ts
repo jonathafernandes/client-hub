@@ -1,5 +1,6 @@
 import { db } from '../../_lib/prisma';
 import { NextResponse } from "next/server";
+
 async function handler(req: Request) {
     if (req.method === 'POST') {
         const { clientId, products, totalValue, discount } = await req.json() as {
@@ -30,15 +31,21 @@ async function handler(req: Request) {
                     },
                 },
             });
-            return NextResponse.json(order, { status: 201 });
+
+            const res = NextResponse.json(order, { status: 201 });
+            res.headers.set('Cache-Control', 'no-store');
+            return res;
         } catch (error) {
             console.error('Erro ao criar pedido:', error);
             return NextResponse.json({ message: 'Erro ao salvar o pedido' }, { status: 500 });
         }
     }
-    NextResponse.json(`Método ${req.method} não permitido`, {
+
+    const res = NextResponse.json(`Método ${req.method} não permitido`, {
         status: 405,
     });
+    res.headers.set('Cache-Control', 'no-store');
+    return res;
 }
 
 export { handler as POST }
