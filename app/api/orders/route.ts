@@ -1,6 +1,8 @@
 import { db } from '../../_lib/prisma';
 import { NextResponse } from "next/server";
 
+export const fetchCache = 'force-no-store'
+
 async function handler(req: Request) {
     if (req.method === 'POST') {
         const { clientId, products, totalValue, discount } = await req.json() as {

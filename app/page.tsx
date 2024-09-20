@@ -8,6 +8,8 @@ import { authOptions } from "./_lib/auth";
 import { getServerSession } from "next-auth";
 import { db } from "./_lib/prisma";
 
+export const fetchCache = 'force-no-store'
+
 export default async function Home() {
   const session = await getServerSession(authOptions);
 

@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   description: "Gerencie seus clientes de forma simples e eficiente.",
 };
 
+export const fetchCache = 'force-no-store'
 
 export default function RootLayout({
   children,
