@@ -28,7 +28,7 @@ const Clients =  ({ clients }: ClientsProps) => {
                 </Button>
                 </div> */}
             {clients?.length === 0 ? (
-                <div className="text-center text-white p-4">Nenhum cliente encontrado! Clique no botão ao lado para criar um novo cliente.</div>
+                <div className="text-center text-white p-4 mt-[20vh]">Nenhum cliente encontrado! Clique no botão para criar um novo cliente.</div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y border border-gray-500">
