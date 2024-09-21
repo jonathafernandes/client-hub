@@ -77,30 +77,30 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
         <tr className="text-sm text-gray-400">
             <Sheet>
                 <SheetTrigger asChild>
-                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap cursor-pointer hover:bg-gray-800">
+                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap cursor-pointer uppercase hover:bg-gray-800">
                         {client.name}
                     </td>
                 </SheetTrigger>
-                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.fantasyName ?? 'N/A'}</td>
+                <td className="px-4 py-4 sm:px-6 whitespace-nowrap uppercase">{client.fantasyName ?? 'N/A'}</td>
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
                 <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
                     <div className="mt-6">
                         <div className="mb-4 flex items-center gap-4 border-b pb-4">
-                            <h2 className="text-xl font-bold">{client.name}</h2>
+                            <h2 className="text-xl font-bold uppercase">{client.name}</h2>
                             <Badge className="bg-gray-800 border">
                                 00{client.registerNumber}
                             </Badge>
                         </div>
-                        <p className="mb-2"><strong>Nome Fantasia:</strong> {client.fantasyName}</p>
-                        <p className="mb-2"><strong>Razão Social:</strong> {client.corporateName}</p>
-                        <p className="mb-2"><strong>CNPJ/CPF:</strong> {client.cnpjOrCpf}</p>
-                        <p className="mb-2"><strong>Endereço:</strong> {client.address}</p>
-                        <p className="mb-2"><strong>Bairro:</strong> {client.district}</p>
-                        <p className="mb-2"><strong>Cidade:</strong> {client.city}</p>
-                        <p className="mb-2"><strong>CEP:</strong> {client.zipCode}</p>
-                        <p className="mb-2"><strong>Ponto de referência:</strong> {client.referencePoint}</p>
-                        <p className="mb-2"><strong>E-mail:</strong> {client.email}</p>
-                        <p className="mb-2"><strong>Telefone:</strong> {client.phone}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">Nome Fantasia:</strong> {client.fantasyName}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">Razão Social:</strong> {client.corporateName}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">CNPJ/CPF:</strong> {client.cnpjOrCpf}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">Endereço:</strong> {client.address}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">Bairro:</strong> {client.district}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">Cidade:</strong> {client.city}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">CEP:</strong> {client.zipCode}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">Ponto de referência:</strong> {client.referencePoint}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">E-mail:</strong> {client.email}</p>
+                        <p className="mb-2 uppercase"><strong className="normal-case">Telefone:</strong> {client.phone}</p>
 
                         <p className="mb-4"><strong>Número de pedidos:</strong> {client.orders.length}</p>
 

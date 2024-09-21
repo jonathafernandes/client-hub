@@ -41,6 +41,7 @@ const Clients =  ({ clients }: ClientsProps) => {
                         </thead>
                         <tbody className="bg-gray-900 divide-y divide-gray-700">
                             {clients?.map((client: Client) => (
+                                // TODO: Implementar tipagem correta
                                 // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                 <ClientItem key={client.id} client={client as any} products={products} />
                             ))}

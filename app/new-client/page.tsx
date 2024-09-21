@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
 import { Button } from "../_components/ui/button";
@@ -11,8 +11,11 @@ import { toast } from "sonner";
 
 const NewClientPage = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<ClientParams>();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const onSubmit = async (data: ClientParams) => {
+        setIsSubmitting(true);
+
         try {
             await saveClient({
                 name: data.name ?? "",
@@ -30,10 +33,12 @@ const NewClientPage = () => {
             setTimeout(() => {
                 toast("Cliente cadastrado com sucesso!");
                 reset();
+                setIsSubmitting(false);
             }, 500);
         } catch (error) {
             console.error("Erro ao cadastrar cliente:", error);
-            alert("Erro ao cadastrar cliente!");
+            toast("Erro ao cadastrar cliente! Tente novamente.");
+            setIsSubmitting(false);
         }
     };
 
@@ -165,8 +170,9 @@ const NewClientPage = () => {
                 <Button
                     variant="default"
                     type="submit"
+                    disabled={isSubmitting}
                 >
-                    Salvar
+                    {isSubmitting ? 'Salvando...' : 'Salvar'}
                 </Button>
             </form>
             <Footer />

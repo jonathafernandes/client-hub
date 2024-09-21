@@ -38,7 +38,7 @@ const OrderItem = ({ order }: OrderItemProps) => {
                 <SheetTrigger asChild>
                     <td className="px-4 py-4 whitespace-nowrap cursor-pointer hover:bg-gray-800">00{order.registerNumber}</td>
                 </SheetTrigger>
-                <td className="px-4 py-4 whitespace-nowrap">{order.client.fantasyName}</td>
+                <td className="px-4 py-4 whitespace-nowrap uppercase">{order.client.fantasyName}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatPercentage(order.discount)}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
@@ -65,7 +65,7 @@ const OrderItem = ({ order }: OrderItemProps) => {
                             00{order.registerNumber}
                         </Badge>
                     </div>
-                    <p><strong>Cliente: </strong>{order.client.fantasyName}</p>
+                    <p className="uppercase"><strong>Cliente: </strong>{order.client.fantasyName}</p>
                     <p><strong>Data: </strong>{formatDate(order.createdAt)}</p>
                     <p><strong>Desconto: </strong>{formatPercentage(order.discount)}</p>
                     <p><strong>Valor total: </strong>{formatCurrency(order.totalValue)}</p>
