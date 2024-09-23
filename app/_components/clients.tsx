@@ -37,6 +37,7 @@ const Clients =  ({ clients }: ClientsProps) => {
                                 <th className="px-4 py-3 w-1/12">Nome</th>
                                 <th className="px-4 py-3 w-1/12">Nome fantasia</th>
                                 <th className="px-4 py-3 w-1/12">Pedidos</th>
+                                <th className="px-4 py-3 w-1/12">Excluir</th>
                             </tr>
                         </thead>
                         <tbody className="bg-gray-900 divide-y divide-gray-700">

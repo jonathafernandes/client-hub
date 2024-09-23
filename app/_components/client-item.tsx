@@ -7,6 +7,9 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Dialog } from "./ui/dialog";
 import NewOrderDialog from "./new-order-dialog";
+import { Trash } from "lucide-react";
+import { toast } from "sonner";
+import { deleteClient } from "../_actions/delete-client";
 
 type ClientWithOrders = Prisma.ClientGetPayload<{
     select: {
@@ -55,6 +58,7 @@ export interface ClientItemProps {
 
 const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const openDialog = () => setIsDialogOpen(true);
 
@@ -73,6 +77,17 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
         });
     };
 
+    const handledeleteClientClick = async (clientId: string) => {
+        setIsDeleting(true);
+        try {
+            await deleteClient(clientId);
+            toast.success("Cliente removido com sucesso!");
+        } catch (error) {
+            console.error("Erro ao remover cliente:", error);
+        } finally {
+            setIsDeleting(false);
+        }
+    };
     return (
         <tr className="text-sm text-gray-400">
             <Sheet>
@@ -83,6 +98,9 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                 </SheetTrigger>
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap uppercase">{client.fantasyName ?? 'N/A'}</td>
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
+                <Button variant="default" className="px-6 ml-4 mt-[0.32rem] whitespace-nowrap" onClick={() => handledeleteClientClick(client.id)} disabled={isDeleting}>
+                    {isDeleting ? 'Excluindo...' : <Trash size={16} />}
+                </Button>
                 <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
                     <div className="mt-6">
                         <div className="mb-4 flex items-center gap-4 border-b pb-4">
