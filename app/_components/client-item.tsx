@@ -117,7 +117,6 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
                         <AlertDialogTrigger asChild>
                             <Button
                                 variant="default"
-                            // className="px-6 ml-4 mt-[0.32rem] whitespace-nowrap"
                             >
                                 <Trash size={16} />
                             </Button>

@@ -171,6 +171,7 @@ const NewClientPage = () => {
                     variant="default"
                     type="submit"
                     disabled={isSubmitting}
+                    className="w-full sm:w-auto"
                 >
                     {isSubmitting ? 'Salvando...' : 'Salvar'}
                 </Button>

@@ -137,8 +137,6 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                                 >
                                     <option value={0}>Sem desconto</option>
                                     <option value={5}>5% de desconto</option>
-                                    <option value={10}>10% de desconto</option>
-                                    <option value={15}>15% de desconto</option>
                                 </select>
                             </div>
                             <div className="mt-8 text-right">
