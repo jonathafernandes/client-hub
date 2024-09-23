@@ -10,6 +10,17 @@ import NewOrderDialog from "./new-order-dialog";
 import { Trash } from "lucide-react";
 import { toast } from "sonner";
 import { deleteClient } from "../_actions/delete-client";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "./ui/alert-dialog"
 
 type ClientWithOrders = Prisma.ClientGetPayload<{
     select: {
@@ -102,14 +113,41 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap uppercase">{client.fantasyName ?? 'N/A'}</td>
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">
-                    <Button
+                    <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                            <Button
+                                variant="default"
+                            // className="px-6 ml-4 mt-[0.32rem] whitespace-nowrap"
+                            >
+                                <Trash size={16} />
+                            </Button>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent className="p-4 rounded-sm font-[family-name:var(--font-geist-sans)] max-h-[90%] w-11/12 overflow-x-auto">
+                            <AlertDialogHeader>
+                                <AlertDialogTitle>Você realmente deseja excluir esse cliente?</AlertDialogTitle>
+                                <AlertDialogDescription>
+                                    Essa ação não poderá ser desfeita.
+                                </AlertDialogDescription>
+                            </AlertDialogHeader>
+                            <AlertDialogFooter>
+                                <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                                <AlertDialogAction
+                                    onClick={handleDeleteClientClick}
+                                    disabled={isDeleting}
+                                >
+                                    Confirmar
+                                </AlertDialogAction>
+                            </AlertDialogFooter>
+                        </AlertDialogContent>
+                    </AlertDialog>
+                    {/* <Button
                         variant="default"
                         className="px-6 ml-4 mt-[0.32rem] whitespace-nowrap"
                         onClick={handleDeleteClientClick}
                         disabled={isDeleting}
                     >
                         {isDeleting ? 'Excluindo...' : <Trash size={16} />}
-                    </Button>
+                    </Button> */}
                 </td>
                 <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
                     <div className="mt-6">

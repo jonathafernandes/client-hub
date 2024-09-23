@@ -39,26 +39,20 @@ const Dashboard = () => {
   const deleteClientMutation = useMutation({
     mutationFn: deleteClient,
     onMutate: async (deletedClientId) => {
-      // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
       await queryClient.cancelQueries({ queryKey: ['clients'] });
 
-      // Snapshot the previous value
       const previousClients = queryClient.getQueryData<Client[]>(['clients']);
 
-      // Optimistically update to the new value
       queryClient.setQueryData<Client[]>(['clients'], (old) =>
         old ? old.filter((client) => client.id !== deletedClientId) : []
       );
 
-      // Return a context object with the snapshotted value
       return { previousClients };
     },
     onError: (err, newTodo, context) => {
-      // If the mutation fails, use the context returned from onMutate to roll back
       queryClient.setQueryData(['clients'], context?.previousClients);
     },
     onSettled: () => {
-      // Always refetch after error or success:
       queryClient.invalidateQueries({ queryKey: ['clients'] });
     },
   });
