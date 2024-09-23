@@ -31,13 +31,13 @@ const NewClientPage = () => {
             });
 
             setTimeout(() => {
-                toast("Cliente cadastrado com sucesso!");
+                toast.success("Cliente cadastrado com sucesso!");
                 reset();
                 setIsSubmitting(false);
             }, 500);
         } catch (error) {
             console.error("Erro ao cadastrar cliente:", error);
-            toast("Erro ao cadastrar cliente! Tente novamente.");
+            toast.error("Erro ao cadastrar cliente! Tente novamente.");
             setIsSubmitting(false);
         }
     };

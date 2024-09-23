@@ -10,6 +10,7 @@ import { getClients } from "../_actions/get-client";
 import { deleteClient } from "../_actions/delete-client";
 import { Product, Client as PrismaClient } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
+import { deleteOrder } from "../_actions/delete-order";
 
 interface Client extends PrismaClient {
   orders: Order[];
@@ -57,8 +58,33 @@ const Dashboard = () => {
     },
   });
 
-  const handleDelete = (id: string) => {
+  const deleteOrderMutation = useMutation({
+    mutationFn: deleteOrder,
+    onMutate: async (deletedOrderId) => {
+      await queryClient.cancelQueries({ queryKey: ['clients'] });
+
+      const previousClients = queryClient.getQueryData<Client[]>(['clients']);
+
+      queryClient.setQueryData<Client[]>(['clients'], (old) =>
+        old ? old.filter((client) => client.orders.some((order) => order.id !== deletedOrderId)) : []
+      );
+
+      return { previousClients };
+    },
+    onError: (err, newTodo, context) => {
+      queryClient.setQueryData(['clients'], context?.previousClients);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['clients'] });
+    },
+  });
+
+  const handleDeleteClient = (id: string) => {
     deleteClientMutation.mutate(id);
+  };
+
+  const handleDeleteOrder = (id: string) => {
+    deleteOrderMutation.mutate(id)
   };
 
   return (
@@ -75,7 +101,7 @@ const Dashboard = () => {
       {error ? (
         <p className="text-red-500">Erro ao carregar clientes.</p>
       ) : (
-        <Clients clients={clients ?? []} onDelete={handleDelete} />
+        <Clients clients={clients ?? []} onDelete={handleDeleteClient} />
       )}
       {(clients ?? []).length > 0 && (
         <>
@@ -95,7 +121,7 @@ const Dashboard = () => {
               <tbody className="bg-gray-900 divide-y divide-gray-700">
                 {clients?.flatMap((client) =>
                   client.orders.map((order: Order) => (
-                    <OrderItem key={order.id} order={order} />
+                    <OrderItem key={order.id} order={order} onDelete={handleDeleteOrder} />
                   ))
                 )}
               </tbody>

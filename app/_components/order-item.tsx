@@ -1,17 +1,36 @@
-import React from "react";
+"use client"
+
+import React, { useState } from "react";
 import OrderFile from "./order-file";
 import { Client, Orders, Prisma, Product } from "@prisma/client";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { deleteOrder } from "../_actions/delete-order";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "./ui/alert-dialog"
+import { toast } from "sonner";
 
 interface OrderItemProps {
     order: Orders & {
         products: Product[];
         client: Client;
-    };        
+    };
+    onDelete: (id: string) => void;
 }
 
-const OrderItem = ({ order }: OrderItemProps) => {
+const OrderItem = ({ order, onDelete }: OrderItemProps) => {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
     const formatDate = (date: Date) => {
         if (!date) return '';
         return new Date(date).toLocaleDateString('pt-BR', {
@@ -32,8 +51,20 @@ const OrderItem = ({ order }: OrderItemProps) => {
         return `${value ? Number(value) : 0}%`;
     };
 
+    const handleDeleteOrderClick = async () => {
+        try {
+            await deleteOrder(order.id);
+            toast.success('Pedido excluído com sucesso!');
+            onDelete(order.id);
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setIsDialogOpen(false);
+        }
+    };
+
     return (
-        <Sheet>
+        <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <tr className="text-sm text-gray-400" key={order.id}>
                 <SheetTrigger asChild>
                     <td className="px-4 py-4 whitespace-nowrap cursor-pointer hover:bg-gray-800">00{order.registerNumber}</td>
@@ -43,9 +74,9 @@ const OrderItem = ({ order }: OrderItemProps) => {
                 <td className="px-4 py-4 whitespace-nowrap">{formatPercentage(order.discount)}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
                 <td className="px-4 py-4 whitespace-nowrap">
-                    <OrderFile 
-                        order={order} 
-                        products={order.products} 
+                    <OrderFile
+                        order={order}
+                        products={order.products}
                         client={{
                             ...order.client,
                             id: order.clientId,
@@ -53,11 +84,11 @@ const OrderItem = ({ order }: OrderItemProps) => {
                             createdAt: order.createdAt,
                             updatedAt: order.updatedAt,
                             registerNumber: order.registerNumber
-                        }} 
+                        }}
                     />
                 </td>
             </tr>
-            <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
+            <SheetContent className="flex flex-col justify-between overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
                 <div className="mt-6">
                     <div className="mb-4 flex items-center gap-4 border-b pb-4">
                         <h2 className="text-xl font-bold">Pedido</h2>
@@ -79,6 +110,29 @@ const OrderItem = ({ order }: OrderItemProps) => {
                         ))}
                     </div>
                 </div>
+                <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                        <Button className="mt-4 w-full">
+                            Excluir
+                        </Button>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent className="p-4 rounded-sm font-[family-name:var(--font-geist-sans)] max-h-[90%] w-11/12 overflow-x-auto">
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>Você realmente deseja excluir esse pedido?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Essa ação não poderá ser desfeita.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                            <AlertDialogAction
+                            onClick={handleDeleteOrderClick}
+                            >
+                                Confirmar
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
             </SheetContent>
         </Sheet>
     );

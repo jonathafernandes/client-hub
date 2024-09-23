@@ -70,7 +70,6 @@ export interface ClientItemProps {
 
 const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
 
     const openDialog = () => setIsDialogOpen(true);
 
@@ -90,15 +89,12 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
     };
 
     const handleDeleteClientClick = async () => {
-        setIsDeleting(true);
         try {
             await deleteClient(client.id);
             toast.success("Cliente removido com sucesso!");
             onDelete(client.id);
         } catch (error) {
             console.error("Erro ao remover cliente:", error);
-        } finally {
-            setIsDeleting(false);
         }
     };
 
@@ -132,21 +128,12 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
                                 <AlertDialogAction
                                     onClick={handleDeleteClientClick}
-                                    disabled={isDeleting}
                                 >
                                     Confirmar
                                 </AlertDialogAction>
                             </AlertDialogFooter>
                         </AlertDialogContent>
                     </AlertDialog>
-                    {/* <Button
-                        variant="default"
-                        className="px-6 ml-4 mt-[0.32rem] whitespace-nowrap"
-                        onClick={handleDeleteClientClick}
-                        disabled={isDeleting}
-                    >
-                        {isDeleting ? 'Excluindo...' : <Trash size={16} />}
-                    </Button> */}
                 </td>
                 <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
                     <div className="mt-6">

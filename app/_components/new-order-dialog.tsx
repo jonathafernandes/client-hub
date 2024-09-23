@@ -78,7 +78,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                 throw new Error(`Erro ao salvar o pedido: ${response.statusText}. Detalhes: ${errorText}`);
             }
 
-            toast('Pedido salvo com sucesso!');
+            toast.success('Pedido salvo com sucesso!');
             setSelectedProducts([]);
             setCurrentProduct("");
             setSelectedDiscount(0);
