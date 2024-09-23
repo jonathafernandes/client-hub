@@ -54,9 +54,10 @@ type Products = Prisma.ProductGetPayload<{
 export interface ClientItemProps {
     client: ClientWithOrders;
     products: Products[];
+    onDelete: (clientId: string) => void;
 }
 
-const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
+const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -77,17 +78,19 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
         });
     };
 
-    const handledeleteClientClick = async (clientId: string) => {
+    const handleDeleteClientClick = async () => {
         setIsDeleting(true);
         try {
-            await deleteClient(clientId);
+            await deleteClient(client.id);
             toast.success("Cliente removido com sucesso!");
+            onDelete(client.id);
         } catch (error) {
             console.error("Erro ao remover cliente:", error);
         } finally {
             setIsDeleting(false);
         }
     };
+
     return (
         <tr className="text-sm text-gray-400">
             <Sheet>
@@ -98,9 +101,16 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
                 </SheetTrigger>
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap uppercase">{client.fantasyName ?? 'N/A'}</td>
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">{client.orders.length}</td>
-                <Button variant="default" className="px-6 ml-4 mt-[0.32rem] whitespace-nowrap" onClick={() => handledeleteClientClick(client.id)} disabled={isDeleting}>
-                    {isDeleting ? 'Excluindo...' : <Trash size={16} />}
-                </Button>
+                <td className="px-4 py-4 sm:px-6 whitespace-nowrap">
+                    <Button
+                        variant="default"
+                        className="px-6 ml-4 mt-[0.32rem] whitespace-nowrap"
+                        onClick={handleDeleteClientClick}
+                        disabled={isDeleting}
+                    >
+                        {isDeleting ? 'Excluindo...' : <Trash size={16} />}
+                    </Button>
+                </td>
                 <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
                     <div className="mt-6">
                         <div className="mb-4 flex items-center gap-4 border-b pb-4">
@@ -156,6 +166,6 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products }) => {
             </Sheet>
         </tr>
     );
-}
+};
 
 export default ClientItem;

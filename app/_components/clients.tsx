@@ -7,28 +7,31 @@ import { Client } from "@prisma/client";
 
 interface ClientsProps {
     clients: Client[];
+    onDelete: (id: string) => void;
 }
 
-const Clients =  ({ clients }: ClientsProps) => {
+const Clients = ({ clients, onDelete }: ClientsProps) => {
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         getProducts().then((products) => {
             setProducts(products);
         });
-    }
-    , []);
+    }, []);
+
     return (
         <>
             {/* TODO: Implementar pesquisa pelo cliente */}
             {/* <div className="flex items-center gap-2 mb-4">
                 <input placeholder="Pesquise pelo cliente..." className="bg-gray-950 block w-full sm:w-1/2 px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm" />
                 <Button variant="default">
-                <SearchIcon size={20} />
+                    <SearchIcon size={20} />
                 </Button>
-                </div> */}
+            </div> */}
             {clients?.length === 0 ? (
-                <div className="text-center text-white p-4 mt-[20vh]">Nenhum cliente encontrado! Clique no botão para criar um novo cliente.</div>
+                <div className="text-center text-white p-4 mt-[20vh]">
+                    Nenhum cliente encontrado! Clique no botão para criar um novo cliente.
+                </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y border border-gray-500">
@@ -42,16 +45,20 @@ const Clients =  ({ clients }: ClientsProps) => {
                         </thead>
                         <tbody className="bg-gray-900 divide-y divide-gray-700">
                             {clients?.map((client: Client) => (
-                                // TODO: Implementar tipagem correta
-                                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                                <ClientItem key={client.id} client={client as any} products={products} />
+                                <ClientItem
+                                    key={client.id}
+                                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                                    client={client as any}
+                                    products={products}
+                                    onDelete={() => onDelete(client.id)} // Chama onDelete ao excluir
+                                />
                             ))}
                         </tbody>
                     </table>
                 </div>
             )}
         </>
-    )
+    );
 };
 
 export default Clients;
