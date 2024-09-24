@@ -54,8 +54,12 @@ const OrderFile = ({ order, products, client }: OrderFileProps) => {
             },
             didDrawPage: (data) => {
                 if (data.cursor) {
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(10);
+                    doc.text(`DESCONTO: ${order.discount}%`, 20, data.cursor.y + 10);
+                    doc.setFontSize(14);
                     doc.setFont('helvetica', 'bold');
-                    doc.text(`TOTAL: R$${order.totalValue}`, 20, data.cursor.y + 10);
+                    doc.text(`TOTAL: R$${order.totalValue}`, 155, data.cursor.y + 10);
                 }
             }
         });

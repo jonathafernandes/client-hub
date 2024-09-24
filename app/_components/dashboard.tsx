@@ -99,7 +99,7 @@ const Dashboard = () => {
         </Button>
       </div>
       {error ? (
-        <p className="text-red-500">Erro ao carregar clientes.</p>
+        <p className="text-red-500">Erro ao carregar clientes!</p>
       ) : (
         <Clients clients={clients ?? []} onDelete={handleDeleteClient} />
       )}

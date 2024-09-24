@@ -4,6 +4,8 @@ import { Prisma } from "@prisma/client";
 import { Button } from "./ui/button";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { Plus, Minus } from "lucide-react";
+
 type NewOrderDialog = Prisma.ProductGetPayload<{
     select: { id: true; name: true; price: true; }
 }>;
@@ -13,13 +15,19 @@ interface NewOrderDialogProps {
     clientId: string;
 }
 
-const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
+interface SelectedProduct extends NewOrderDialog {
+    quantity: number;
+}
 
-    const [selectedProducts, setSelectedProducts] = useState<NewOrderDialog[]>([]);
+const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
+    const [selectedProducts, setSelectedProducts] = useState<SelectedProduct[]>([]);
     const [currentProduct, setCurrentProduct] = useState<string>("");
+    const [currentQuantity, setCurrentQuantity] = useState<number>(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [selectedDiscount, setSelectedDiscount] = useState<number>(0);
+
     const queryClient = useQueryClient();
+
     useEffect(() => {
         if (products.length > 0 && products[0].name) {
             setCurrentProduct(products[0].name);
@@ -27,7 +35,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
     }, [products]);
 
     const calculateTotal = () => {
-        const subtotal = selectedProducts.reduce((total, product) => total + Number(product.price), 0);
+        const subtotal = selectedProducts.reduce((total, product) => total + Number(product.price) * product.quantity, 0);
         const discountAmount = (subtotal * selectedDiscount) / 100;
         return subtotal - discountAmount;
     };
@@ -35,10 +43,24 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
     const handleAddProduct = () => {
         const productToAdd = products.find(p => p.name === currentProduct);
         if (productToAdd && productToAdd.id) {
-            setSelectedProducts(prev => [...prev, productToAdd]);
+            const existingProductIndex = selectedProducts.findIndex(p => p.id === productToAdd.id);
+            if (existingProductIndex > -1) {
+                setSelectedProducts(prev => prev.map((p, index) => 
+                    index === existingProductIndex ? { ...p, quantity: p.quantity + currentQuantity } : p
+                ));
+            } else {
+                setSelectedProducts(prev => [...prev, { ...productToAdd, quantity: currentQuantity }]);
+            }
+            setCurrentQuantity(1);
         } else {
             console.error('Produto não encontrado ou sem ID:', currentProduct, productToAdd);
         }
+    };
+
+    const handleUpdateQuantity = (index: number, change: number) => {
+        setSelectedProducts(prev => prev.map((product, i) => 
+            i === index ? { ...product, quantity: Math.max(1, product.quantity + change) } : product
+        ));
     };
 
     const handleRemoveProduct = (index: number) => {
@@ -87,6 +109,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
             });
         } catch (error) {
             console.error('Erro ao salvar o pedido:', error);
+            toast.error('Erro ao salvar o pedido. Por favor, tente novamente.');
         } finally {
             setIsSubmitting(false);
         }
@@ -97,21 +120,22 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
             <DialogHeader>
                 <DialogTitle className="text-base uppercase">Novo pedido</DialogTitle>
             </DialogHeader>
-            <div className="space-y-4">
-                <div className="flex space-x-2">
+            <div className="space-y-2">
+                <div className="flex gap-2">
                     <select
                         name="product"
-                        className="product-item flex-grow custom-font bg-slate-900 p-2 rounded-sm border"
+                        className="flex-grow custom-font bg-slate-900 px-4 py-2 rounded-sm border w-full sm:w-auto sm:flex-1"
                         value={currentProduct}
                         onChange={(e) => setCurrentProduct(e.target.value)}
                     >
+                        <option disabled value="">Selecione um produto</option>
                         {products.map((product) => (
                             <option key={product.id} value={product.name || ''}>
                                 {product.name?.toUpperCase()} - R${Number(product.price).toLocaleString('pt-BR')}
                             </option>
                         ))}
                     </select>
-                    <Button onClick={handleAddProduct}>Adicionar</Button>
+                    <Button onClick={handleAddProduct}><Plus size={16} /></Button>
                 </div>
                 <div className="mt-4">
                     {selectedProducts.length === 0 ? (
@@ -122,8 +146,15 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                             <ul className="space-y-2">
                                 {selectedProducts.map((product, index) => (
                                     <li key={index} className="flex justify-between items-center">
-                                        <span className="uppercase">{product.name} - R${Number(product.price).toLocaleString('pt-BR')}</span>
-                                        <Button variant="destructive" size="sm" onClick={() => handleRemoveProduct(index)}>Remover</Button>
+                                        <span className="uppercase">
+                                            {product.name} - R${Number(product.price).toLocaleString('pt-BR')} x {product.quantity}
+                                        </span>
+                                        <div className="flex items-center space-x-2">
+                                            <Button variant="outline" size="sm" onClick={() => handleUpdateQuantity(index, -1)}><Minus size={12} /></Button>
+                                            <span>{product.quantity}</span>
+                                            <Button variant="outline" size="sm" onClick={() => handleUpdateQuantity(index, 1)}><Plus size={12} /></Button>
+                                            <Button variant="destructive" size="sm" onClick={() => handleRemoveProduct(index)}>Remover</Button>
+                                        </div>
                                     </li>
                                 ))}
                             </ul>
