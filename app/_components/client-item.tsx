@@ -7,7 +7,8 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Dialog } from "./ui/dialog";
 import NewOrderDialog from "./new-order-dialog";
-import { Trash } from "lucide-react";
+import EditClientDialog from "./edit-client-dialog";
+import { Pencil, Trash } from "lucide-react";
 import { toast } from "sonner";
 import { deleteClient } from "../_actions/delete-client";
 import {
@@ -37,6 +38,8 @@ type ClientWithOrders = Prisma.ClientGetPayload<{
         cnpjOrCpf: true;
         referencePoint: true;
         registerNumber: true;
+        createdAt: true;
+        updatedAt: true;
         orders?: {
             select: {
                 id: true;
@@ -70,8 +73,11 @@ export interface ClientItemProps {
 
 const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
     const openDialog = () => setIsDialogOpen(true);
+    const openEditDialog = () => setIsEditDialogOpen(true);
+    const closeEditDialog = () => setIsEditDialogOpen(false);
 
     const formatCurrency = (value: Prisma.Decimal | null) => {
         return new Intl.NumberFormat('pt-BR', {
@@ -111,9 +117,7 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
                 <td className="px-4 py-4 sm:px-6 whitespace-nowrap">
                     <AlertDialog>
                         <AlertDialogTrigger asChild>
-                            <Button
-                                variant="default"
-                            >
+                            <Button variant="default">
                                 <Trash size={16} />
                             </Button>
                         </AlertDialogTrigger>
@@ -126,9 +130,7 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
                             </AlertDialogHeader>
                             <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                                <AlertDialogAction
-                                    onClick={handleDeleteClientClick}
-                                >
+                                <AlertDialogAction onClick={handleDeleteClientClick}>
                                     Confirmar
                                 </AlertDialogAction>
                             </AlertDialogFooter>
@@ -136,6 +138,13 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
                     </AlertDialog>
                 </td>
                 <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
+                    <Button variant="default" className="p-3" onClick={openEditDialog}>
+                        <Pencil size={16} />
+                    </Button>
+                    <Dialog open={isEditDialogOpen} onOpenChange={closeEditDialog}>
+                        <EditClientDialog client={client} />
+                    </Dialog>
+
                     <div className="mt-6">
                         <div className="mb-4 flex items-center gap-4 border-b pb-4">
                             <h2 className="text-xl font-bold uppercase">{client.name}</h2>

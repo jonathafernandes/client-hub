@@ -1,15 +1,19 @@
-"use client";
-
 import React, { useState } from "react";
-import Header from "../_components/header";
-import Footer from "../_components/footer";
-import { Button } from "../_components/ui/button";
+import { Client } from "@prisma/client";
+import { DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
+import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
-import { saveClient } from "../_actions/save-client";
-import { ClientParams } from "../_actions/save-client";
+import { ClientParams, updateClient } from "../_actions/update-client";
 import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
 
-const NewClientPage = () => {
+interface EditClientDialogProps {
+    client: Client;
+}
+
+const EditClientDialog = ({ client }: EditClientDialogProps) => {
+    const queryClient = useQueryClient();
+
     const { register, handleSubmit, formState: { errors }, reset } = useForm<ClientParams>();
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -17,7 +21,7 @@ const NewClientPage = () => {
         setIsSubmitting(true);
 
         try {
-            await saveClient({
+            await updateClient({
                 name: data.name,
                 fantasyName: data.fantasyName,
                 corporateName: data.corporateName,
@@ -28,12 +32,16 @@ const NewClientPage = () => {
                 district: data.district,
                 city: data.city,
                 cnpjOrCpf: data.cnpjOrCpf,
+                id: client.id,
             });
 
             setTimeout(() => {
-                toast.success("Cliente cadastrado com sucesso!");
+                toast.success("Cliente salvo com sucesso!");
                 reset();
                 setIsSubmitting(false);
+                queryClient.invalidateQueries({
+                    queryKey: ['clients'],
+                });
             }, 500);
         } catch (error) {
             console.error("Erro ao cadastrar cliente:", error);
@@ -42,12 +50,12 @@ const NewClientPage = () => {
         }
     };
 
-
     return (
-        <div className="flex flex-col min-h-screen font-[family-name:var(--font-geist-sans)]">
-            <Header />
-            <h1 className="text-lg font-bold border-b p-5">Novo cliente</h1>
-            <form onSubmit={handleSubmit(onSubmit)} className="max-w-lg p-6 my-0 mx-auto">
+        <DialogContent className="p-4 rounded-sm font-[family-name:var(--font-geist-sans)] max-h-[90%] w-11/12 overflow-x-auto">
+            <DialogHeader>
+                <DialogTitle className="text-base uppercase">Editar cliente</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="mb-4">
                     <label htmlFor="name" className="block text-sm font-medium text-gray-300">
                         Nome
@@ -57,6 +65,7 @@ const NewClientPage = () => {
                         id="name"
                         {...register("name", { required: true })}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                        defaultValue={client.name?.toString()}
                     />
                     {errors?.name?.type === "required" && <span className="text-red-500 text-sm">Campo obrigatório!</span>}
                 </div>
@@ -69,6 +78,7 @@ const NewClientPage = () => {
                         id="fantasyName"
                         {...register("fantasyName")}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                        defaultValue={client.fantasyName?.toString()}
                     />
                 </div>
                 <div className="mb-4">
@@ -80,18 +90,20 @@ const NewClientPage = () => {
                         id="corporateName"
                         {...register("corporateName")}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                        defaultValue={client.corporateName?.toString()}
                     />
                 </div>
 
                 <div className="mb-4">
                     <label htmlFor="cnpjOrCpf" className="block text-sm font-medium text-gray-300">
-                       CPF/CNPJ
+                        CPF/CNPJ
                     </label>
                     <input
                         type="text"
                         id="cnpjOrCpf"
                         {...register("cnpjOrCpf")}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                        defaultValue={client.cnpjOrCpf?.toString()}
                     />
                 </div>
 
@@ -104,6 +116,7 @@ const NewClientPage = () => {
                         id="phone"
                         {...register("phone")}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                        defaultValue={client.phone?.toString()}
                     />
                 </div>
 
@@ -116,6 +129,7 @@ const NewClientPage = () => {
                         id="email"
                         {...register("email")}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                        defaultValue={client.email?.toString()}
                     />
                 </div>
 
@@ -128,6 +142,7 @@ const NewClientPage = () => {
                         id="address"
                         {...register("address")}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                        defaultValue={client.address?.toString()}
                     />
                 </div>
 
@@ -141,6 +156,7 @@ const NewClientPage = () => {
                             id="district"
                             {...register("district")}
                             className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                            defaultValue={client.district?.toString()}
                         />
                     </div>
                     <div>
@@ -152,6 +168,7 @@ const NewClientPage = () => {
                             id="city"
                             {...register("city")}
                             className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                            defaultValue={client.city?.toString()}
                         />
                     </div>
                 </div>
@@ -164,6 +181,7 @@ const NewClientPage = () => {
                         id="zipCode"
                         {...register("zipCode")}
                         className="bg-gray-900 mt-1 block w-full px-3 py-2 border border-gray-700 rounded-sm shadow-sm focus:outline-none focus:ring-gray-500 focus:border-gray-500 sm:text-sm"
+                        defaultValue={client.zipCode?.toString()}
                     />
                 </div>
 
@@ -176,9 +194,8 @@ const NewClientPage = () => {
                     {isSubmitting ? 'Salvando...' : 'Salvar'}
                 </Button>
             </form>
-            <Footer />
-        </div>
-    );
+        </DialogContent>
+    )
 };
 
-export default NewClientPage;
+export default EditClientDialog;
