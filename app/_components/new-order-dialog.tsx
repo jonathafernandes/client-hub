@@ -45,7 +45,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
         if (productToAdd && productToAdd.id) {
             const existingProductIndex = selectedProducts.findIndex(p => p.id === productToAdd.id);
             if (existingProductIndex > -1) {
-                setSelectedProducts(prev => prev.map((p, index) => 
+                setSelectedProducts(prev => prev.map((p, index) =>
                     index === existingProductIndex ? { ...p, quantity: p.quantity + currentQuantity } : p
                 ));
             } else {
@@ -58,7 +58,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
     };
 
     const handleUpdateQuantity = (index: number, change: number) => {
-        setSelectedProducts(prev => prev.map((product, i) => 
+        setSelectedProducts(prev => prev.map((product, i) =>
             i === index ? { ...product, quantity: Math.max(1, product.quantity + change) } : product
         ));
     };
@@ -69,37 +69,45 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
 
     const handleSubmitOrder = async () => {
         if (selectedProducts.length === 0 || !clientId) {
+            toast.error('Selecione pelo menos um produto e verifique o ID do cliente.');
             return;
         }
-
+    
         setIsSubmitting(true);
         try {
-            const orderProducts = selectedProducts.map((product, index) => {
-                if (!product.id) {
-                    console.error(`Produto sem ID encontrado no índice ${index}:`, product);
-                    throw new Error(`Produto sem ID encontrado: ${product.name}`);
-                }
-                return { id: product.id };
-            });
-
+            const orderProducts = selectedProducts.map((product) => ({
+                product: {
+                    connect: { id: product.id },
+                },
+                quantity: product.quantity,
+            }));
+    
+            const orderData = {
+                clientId,
+                products: {
+                    create: orderProducts,
+                },
+                totalValue: calculateTotal(),
+                discount: selectedDiscount,
+            };
+    
+            console.log('Dados do pedido a serem enviados:', JSON.stringify(orderData, null, 2));
+    
             const response = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    clientId,
-                    products: orderProducts,
-                    totalValue: calculateTotal(),
-                    discount: selectedDiscount,
-                }),
+                body: JSON.stringify(orderData),
             });
-
+    
+            const responseData = await response.text();
+            console.log('Resposta da API:', response.status, responseData);
+    
             if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Erro ao salvar o pedido: ${response.statusText}. Detalhes: ${errorText}`);
+                throw new Error(`Erro ao salvar o pedido: ${response.statusText}. Detalhes: ${responseData}`);
             }
-
+    
             toast.success('Pedido salvo com sucesso!');
             setSelectedProducts([]);
             setCurrentProduct("");
@@ -109,7 +117,7 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
             });
         } catch (error) {
             console.error('Erro ao salvar o pedido:', error);
-            toast.error('Erro ao salvar o pedido. Por favor, tente novamente.');
+            toast.error(`Erro ao salvar o pedido: ${error instanceof Error ? error.message : 'Erro desconhecido'}`);
         } finally {
             setIsSubmitting(false);
         }

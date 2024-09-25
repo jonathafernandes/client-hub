@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import OrderFile from "./order-file";
-import { Client, Orders, Prisma, Product } from "@prisma/client";
+import { Client, OrderProduct, Orders, Prisma, Product } from "@prisma/client";
 import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
@@ -21,14 +21,16 @@ import {
 import { toast } from "sonner";
 
 interface OrderItemProps {
+    client: Client;
     order: Orders & {
         products: Product[];
         client: Client;
+        orderProducts: (OrderProduct & { product: Product })[];
     };
     onDelete: (id: string) => void;
 }
 
-const OrderItem = ({ order, onDelete }: OrderItemProps) => {
+const OrderItem = ({ client, order, onDelete }: OrderItemProps) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const formatDate = (date: Date) => {
@@ -69,7 +71,7 @@ const OrderItem = ({ order, onDelete }: OrderItemProps) => {
                 <SheetTrigger asChild>
                     <td className="px-4 py-4 whitespace-nowrap cursor-pointer hover:bg-gray-800">00{order.registerNumber}</td>
                 </SheetTrigger>
-                <td className="px-4 py-4 whitespace-nowrap uppercase">{order.client.fantasyName}</td>
+                <td className="px-4 py-4 whitespace-nowrap uppercase">{client.fantasyName}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatPercentage(order.discount)}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatCurrency(order.totalValue)}</td>
@@ -77,14 +79,7 @@ const OrderItem = ({ order, onDelete }: OrderItemProps) => {
                     <OrderFile
                         order={order}
                         products={order.products}
-                        client={{
-                            ...order.client,
-                            id: order.clientId,
-                            corporateName: order.client.name,
-                            createdAt: order.createdAt,
-                            updatedAt: order.updatedAt,
-                            registerNumber: order.registerNumber
-                        }}
+                        client={client}
                     />
                 </td>
             </tr>
@@ -96,16 +91,17 @@ const OrderItem = ({ order, onDelete }: OrderItemProps) => {
                             00{order.registerNumber}
                         </Badge>
                     </div>
-                    <p className="uppercase"><strong>Cliente: </strong>{order.client.fantasyName}</p>
+                    <p className="uppercase"><strong>Cliente: </strong>{client.fantasyName}</p>
                     <p><strong>Data: </strong>{formatDate(order.createdAt)}</p>
                     <p><strong>Desconto: </strong>{formatPercentage(order.discount)}</p>
                     <p><strong>Valor total: </strong>{formatCurrency(order.totalValue)}</p>
                     <div className="mt-4">
                         <h3 className="text-md font-semibold mb-2">Produtos</h3>
-                        {order.products.map((product) => (
-                            <div key={product.id} className="border p-2 mb-2">
-                                <p className="uppercase"><strong>Nome: </strong>{product.name}</p>
-                                <p><strong>Preço: </strong>{formatCurrency(product.price)}</p>
+                        {order.orderProducts.map((orderProduct) => (
+                            <div key={orderProduct.orderId} className="border p-2 mb-2">
+                                <p className="uppercase"><strong>Nome: </strong>{orderProduct.product.name}</p>
+                                <p className="uppercase"><strong>Quantidade: </strong>{orderProduct.quantity}</p>
+                                <p><strong>Preço: </strong>{formatCurrency(orderProduct.product?.price)}</p>
                             </div>
                         ))}
                     </div>

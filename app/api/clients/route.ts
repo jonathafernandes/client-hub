@@ -30,33 +30,19 @@ export const GET = async () => {
                     updatedAt: true,
                     clientId: true,
                     registerNumber: true,
-                    client: {
+                    orderProducts: {
                         select: {
-                            id: true,
-                            name: true,
-                            email: true,
-                            phone: true,
-                            address: true,
-                            district: true,
-                            city: true,
-                            zipCode: true,
-                            referencePoint: true,
-                            fantasyName: true,
-                            cnpjOrCpf: true,
-                            corporateName: true,
-                            createdAt: true,
-                            updatedAt: true,
-                            registerNumber: true,
+                            quantity: true,
+                            product: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    price: true,
+                                    createdAt: true,
+                                    updatedAt: true,
+                                }
+                            },
                         },
-                    },
-                    products: {
-                        select: {
-                            id: true,
-                            name: true,
-                            price: true,
-                            createdAt: true,
-                            updatedAt: true,
-                        }
                     },
                 },
             },
