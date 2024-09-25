@@ -50,7 +50,7 @@ const Clients = ({ clients, onDelete }: ClientsProps) => {
                                     // eslint-disable-next-line @typescript-eslint/no-explicit-any
                                     client={client as any}
                                     products={products}
-                                    onDelete={() => onDelete(client.id)} // Chama onDelete ao excluir
+                                    onDelete={() => onDelete(client.id)}
                                 />
                             ))}
                         </tbody>

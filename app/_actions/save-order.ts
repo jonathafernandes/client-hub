@@ -1,9 +1,9 @@
 import { revalidatePath } from "next/cache";
-import { db } from "../_lib/prisma"
+import { db } from "../_lib/prisma";
 
 interface OrderParams {
     clientId: string;
-    products: { id: string }[];
+    products: { id: string; quantity: number }[];
 }
 
 export const saveOrder = async (params: OrderParams) => {
@@ -15,13 +15,14 @@ export const saveOrder = async (params: OrderParams) => {
                         id: params.clientId,
                     },
                 },
-                products: {
+                orderProducts: {
                     create: params.products.map((product) => ({
                         product: {
                             connect: {
                                 id: product.id,
                             },
                         },
+                        quantity: product.quantity,
                     })),
                 },
             },

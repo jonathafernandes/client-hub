@@ -8,7 +8,7 @@ import OrderItem from "./order-item";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { getClients } from "../_actions/get-client";
 import { deleteClient } from "../_actions/delete-client";
-import { Product, Client as PrismaClient } from "@prisma/client";
+import { Product, Client as PrismaClient, OrderProduct } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { deleteOrder } from "../_actions/delete-order";
 
@@ -26,6 +26,7 @@ interface Order {
   registerNumber: number;
   products: Product[];
   client: Client;
+  orderProducts: (OrderProduct & { product: Product })[];
 }
 
 const Dashboard = () => {
@@ -121,7 +122,7 @@ const Dashboard = () => {
               <tbody className="bg-gray-900 divide-y divide-gray-700">
                 {clients?.flatMap((client) =>
                   client.orders.map((order: Order) => (
-                    <OrderItem key={order.id} order={order} onDelete={handleDeleteOrder} />
+                    <OrderItem key={order.id} client={client} order={order} onDelete={handleDeleteOrder} />
                   ))
                 )}
               </tbody>
