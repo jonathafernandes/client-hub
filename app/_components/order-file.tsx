@@ -5,15 +5,16 @@ import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Button } from "./ui/button";
 import { FileDown } from "lucide-react";
-import { Client, Orders, Product } from "@prisma/client";
+import { Client, OrderProduct, Orders, Product } from "@prisma/client";
 
 interface OrderFileProps {
-    order: Orders;
-    products: Product[];
+    order: Orders & {
+        orderProducts: (OrderProduct & { product: Product })[];
+    };
     client: Client;
 }
 
-const OrderFile = ({ order, products, client }: OrderFileProps) => {
+const OrderFile = ({ order, client }: OrderFileProps) => {
     const generatePDF = () => {
         const doc = new jsPDF();
 
@@ -24,8 +25,8 @@ const OrderFile = ({ order, products, client }: OrderFileProps) => {
         doc.setFontSize(14);
         doc.text(appName, pageWidth - 20, 20, { align: "right" });
 
-        doc.setFillColor(162, 11, 21);  
-        doc.rect(20, 25, pageWidth - 40, 10, 'F'); 
+        doc.setFillColor(162, 11, 21);
+        doc.rect(20, 25, pageWidth - 40, 10, 'F');
 
         doc.setTextColor(255, 255, 255);
 
@@ -44,11 +45,14 @@ const OrderFile = ({ order, products, client }: OrderFileProps) => {
 
         autoTable(doc, {
             startY: 120,
-            head: [['PRODUTO', 'PREÇO']],
-            body: products.map(product => [product.name?.toUpperCase() || '', `R$${product.price}`]),
+            head: [['PRODUTO', 'QUANTIDADE', 'PREÇO UNITÁRIO']],
+            body: order?.orderProducts?.map(orderProduct => [
+                orderProduct.product?.name?.toUpperCase() || '', orderProduct.quantity,
+                `R$${orderProduct.product?.price || '0'}`
+            ]),
             theme: 'striped',
             margin: { left: 20, right: 20 },
-            headStyles: { 
+            headStyles: {
                 fillColor: [220, 220, 255],
                 textColor: [0, 0, 0]
             },
@@ -59,7 +63,7 @@ const OrderFile = ({ order, products, client }: OrderFileProps) => {
                     doc.text(`DESCONTO: ${order.discount}%`, 20, data.cursor.y + 10);
                     doc.setFontSize(14);
                     doc.setFont('helvetica', 'bold');
-                    doc.text(`TOTAL: R$${order.totalValue}`, 155, data.cursor.y + 10);
+                    doc.text(`TOTAL: R$${order.totalValue}`, 150, data.cursor.y + 10);
                 }
             }
         });

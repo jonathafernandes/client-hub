@@ -4,7 +4,7 @@ export const getProducts =  async () => {
         return products.json()
     }
     catch (error) {
-        console.error('Erro ao buscar clientes:', error)
+        console.error('Erro ao buscar produtos:', error)
         return []
     }
 }

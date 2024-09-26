@@ -78,7 +78,6 @@ const OrderItem = ({ client, order, onDelete }: OrderItemProps) => {
                 <td className="px-4 py-4 whitespace-nowrap">
                     <OrderFile
                         order={order}
-                        products={order.products}
                         client={client}
                     />
                 </td>

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 async function seedDatabase() {

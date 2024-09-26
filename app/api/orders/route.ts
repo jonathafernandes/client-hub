@@ -12,8 +12,6 @@ async function handler(req: Request) {
       discount?: number;
     };
 
-    console.log('Dados recebidos:', { clientId, products, totalValue, discount });
-
     if (!clientId || !products || !products.create || products.create.length === 0) {
       console.log('ClientId ou produtos inválidos');
       return NextResponse.json('ClientId ou produtos inválidos', { status: 400 });
@@ -45,8 +43,6 @@ async function handler(req: Request) {
           }),
         },
       };
-
-      console.log('Dados do pedido a serem criados:', JSON.stringify(orderData, null, 2));
 
       const order = await db.orders.create({
         data: orderData,
