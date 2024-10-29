@@ -1,6 +1,8 @@
 export const getProducts =  async () => {
     try {
-        const products = await fetch('/api/products')
+        const products = await fetch('/api/products', {
+            cache: 'no-store',
+           })
         return products.json()
     }
     catch (error) {

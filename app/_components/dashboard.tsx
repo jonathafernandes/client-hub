@@ -28,7 +28,7 @@ interface Order {
   client: Client;
   orderProducts: (OrderProduct & { product: Product })[];
 }
-
+export const revalidate = 0
 const Dashboard = () => {
   const queryClient = useQueryClient();
 

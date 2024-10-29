@@ -2,7 +2,9 @@ export const getClients = async () => {
     const timestamp = new Date().getTime()
 
     try {
-        const clients = await fetch(`/api/clients?tid=${timestamp}`, { next: { revalidate: 0 } })
+        const clients = await fetch(`/api/clients?tid=${timestamp}`, { next: { revalidate: 0 }, 
+            cache: 'no-store',
+            })
         return clients.json()
     }
     catch (error) {

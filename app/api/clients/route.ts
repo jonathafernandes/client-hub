@@ -1,7 +1,7 @@
 import { db } from '../../_lib/prisma';
 import { NextResponse } from "next/server";
 
-export const fetchCache = 'force-no-store'
+export const fetchCache = 'force-no-store';
 
 export const GET = async () => {
     const clients = await db.client.findMany({
@@ -40,7 +40,7 @@ export const GET = async () => {
                                     price: true,
                                     createdAt: true,
                                     updatedAt: true,
-                                }
+                                },
                             },
                         },
                     },
@@ -49,7 +49,10 @@ export const GET = async () => {
         },
     });
 
-    const res = NextResponse.json(clients, { status: 201 });
-    res.headers.set('Cache-Control', 'no-store');
+    const res = NextResponse.json(clients, { status: 200 });
+    res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    res.headers.set('Pragma', 'no-cache');
+    res.headers.set('Expires', '0');
+
     return res;
 }

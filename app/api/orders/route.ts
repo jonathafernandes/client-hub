@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from '../../_lib/prisma';
 import { NextResponse } from "next/server";
 
-export const fetchCache = 'force-no-store'
+export const fetchCache = 'force-no-store';
 
-async function handler(req: Request) {
+export async function POST(req: Request) {
   if (req.method === 'POST') {
     const { clientId, products, totalValue, discount } = await req.json() as {
       clientId: string;
@@ -50,20 +51,17 @@ async function handler(req: Request) {
 
       console.log('Pedido criado:', order);
 
-      const res = NextResponse.json(order, { status: 201 });
-      res.headers.set('Cache-Control', 'no-store');
-      return res;
+      const response = NextResponse.json(order);
+      response.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, proxy-revalidate');
+      response.headers.set('Pragma', 'no-cache');
+      response.headers.set('Expires', '0');
+
+      return response;
     } catch (error) {
       console.error('Erro ao criar pedido:', error);
       return NextResponse.json({ message: 'Erro ao salvar o pedido', error: String(error) }, { status: 500 });
     }
   }
 
-  const res = NextResponse.json(`Método ${req.method} não permitido`, {
-    status: 405,
-  });
-  res.headers.set('Cache-Control', 'no-store');
-  return res;
+  return NextResponse.json({ message: `Método ${req.method} não permitido` }, { status: 405 });
 }
-
-export { handler as POST }
