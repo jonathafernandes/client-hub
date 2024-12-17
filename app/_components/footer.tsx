@@ -1,9 +1,11 @@
 import React from "react";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
     return (
-      <footer className="w-full bg-secondary p-6 text-center border rounded-sm">
-        <p className="text-gray-400 text-xs opacity-75">© 2024 Copyright ClientHub</p>
+      <footer className="w-full bg-card p-6 text-center border rounded-sm">
+        <p className="text-gray-400 text-xs opacity-75">© {currentYear} Copyright ClientHub – B4 Comunicação</p>
       </footer>
     );
   };

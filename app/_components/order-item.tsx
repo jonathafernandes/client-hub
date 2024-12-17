@@ -67,9 +67,9 @@ const OrderItem = ({ client, order, onDelete }: OrderItemProps) => {
 
     return (
         <Sheet open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <tr className="text-sm text-gray-400" key={order.id}>
+            <tr className="text-sm text-zinc-800" key={order.id}>
                 <SheetTrigger asChild>
-                    <td className="px-4 py-4 whitespace-nowrap cursor-pointer hover:bg-gray-800">00{order.registerNumber}</td>
+                    <td className="px-4 py-4 whitespace-nowrap cursor-pointer hover:bg-zinc-200">00{order.registerNumber}</td>
                 </SheetTrigger>
                 <td className="px-4 py-4 whitespace-nowrap uppercase">{client.fantasyName}</td>
                 <td className="px-4 py-4 whitespace-nowrap">{formatDate(order.createdAt)}</td>
@@ -82,7 +82,7 @@ const OrderItem = ({ client, order, onDelete }: OrderItemProps) => {
                     />
                 </td>
             </tr>
-            <SheetContent className="flex flex-col justify-between overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
+            <SheetContent className="flex flex-col justify-between overflow-auto w-11/12 bg-card text-gray-200 font-[family-name:var(--font-geist-sans)]">
                 <div className="mt-6">
                     <div className="mb-4 flex items-center gap-4 border-b pb-4">
                         <h2 className="text-xl font-bold">Pedido</h2>

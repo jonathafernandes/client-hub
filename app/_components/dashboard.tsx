@@ -109,7 +109,7 @@ const Dashboard = () => {
           <h4 className="uppercase m-5 font-semibold">Pedidos</h4>
           <div className="overflow-x-auto">
             <table className="min-w-full divide-y border border-gray-500">
-              <thead className="bg-gray-950 text-white">
+              <thead className="bg-gray-950">
                 <tr className="text-left text-xs font-medium uppercase tracking-wider">
                   <th className="px-4 py-3">Número</th>
                   <th className="px-4 py-3">Cliente</th>
@@ -119,7 +119,7 @@ const Dashboard = () => {
                   <th className="px-4 py-3">Baixar</th>
                 </tr>
               </thead>
-              <tbody className="bg-gray-900 divide-y divide-gray-700">
+              <tbody className="bg-card-foreground divide-y divide-gray-700">
                 {clients?.flatMap((client) =>
                   client.orders.map((order: Order) => (
                     <OrderItem key={order.id} client={client} order={order} onDelete={handleDeleteOrder} />

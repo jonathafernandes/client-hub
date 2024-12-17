@@ -105,10 +105,10 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
     };
 
     return (
-        <tr className="text-sm text-gray-400">
+        <tr className="text-sm text-zinc-800">
             <Sheet>
                 <SheetTrigger asChild>
-                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap cursor-pointer uppercase hover:bg-gray-800">
+                    <td className="px-4 py-4 sm:px-6 whitespace-nowrap cursor-pointer uppercase hover:bg-zinc-200">
                         {client.name}
                     </td>
                 </SheetTrigger>
@@ -137,7 +137,7 @@ const ClientItem: React.FC<ClientItemProps> = ({ client, products, onDelete }) =
                         </AlertDialogContent>
                     </AlertDialog>
                 </td>
-                <SheetContent className="overflow-auto w-11/12 bg-secondary text-gray-200 font-[family-name:var(--font-geist-sans)]">
+                <SheetContent className="overflow-auto w-11/12 bg-card text-gray-200 font-[family-name:var(--font-geist-sans)]">
                     <Button variant="default" className="p-3" onClick={openEditDialog}>
                         <Pencil size={16} />
                     </Button>

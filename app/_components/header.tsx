@@ -8,13 +8,14 @@ import { House } from "lucide-react";
 import { Button } from "./ui/button";
 import LogOut from "./logout";
 import { useSession } from "next-auth/react";
+import { Badge } from "./ui/badge";
 
 const Header = () => {
     const { data } = useSession();
 
     return (
         <header>
-            <Card className="rounded-sm bg-secondary">
+            <Card className="rounded-sm bg-card">
                 {data?.user ? (
                     <CardContent className="py-5 sm:px-16 flex items-center justify-between">
                         <Link href="/">
@@ -23,6 +24,9 @@ const Header = () => {
                                 <span className="text-sm text-zinc-400">
                                     ClientHub
                                 </span>
+                                <Badge variant="outline">
+                                    Beta
+                                </Badge>
                             </div>
                         </Link>
                         <div>
@@ -47,6 +51,9 @@ const Header = () => {
                                 <span className="text-sm text-zinc-400">
                                     ClientHub
                                 </span>
+                                <Badge variant="outline">
+                                    Beta
+                                </Badge>
                             </div>
                         </Link>
                     </CardContent>
