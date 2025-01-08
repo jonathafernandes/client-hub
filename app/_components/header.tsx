@@ -57,9 +57,9 @@ const Header = async () => {
                                 </Badge>
                             </div>
                         </Link>
-                        <div className="flex gap-4 items-center">
+                        <div className="flex gap-2 items-center">
                             <Link href="/">
-                                <Button variant="ghost" className="p-2" asChild>
+                                <Button variant="ghost" asChild>
                                     <div className="flex items-center gap-1">
                                         <House size={16} />
                                         <span>
