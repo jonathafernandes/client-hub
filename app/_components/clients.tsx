@@ -48,7 +48,7 @@ const Clients = ({ clients, onDelete }: ClientsProps) => {
                                 // TODO: Resolver o erro de tipagem
                                 <ClientItem
                                     key={client.id}
-                                    client={client}
+                                    client={client as any}
                                     products={products}
                                     onDelete={() => onDelete(client.id)}
                                 />
