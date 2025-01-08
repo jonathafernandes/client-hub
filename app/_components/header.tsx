@@ -1,7 +1,7 @@
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
 import Link from "next/link";
-import { House } from "lucide-react";
+import { House, Settings, User } from "lucide-react";
 import { Button } from "./ui/button";
 import LogOut from "./logout";
 import { Badge } from "./ui/badge";
@@ -17,6 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
 import { db } from "../_lib/prisma";
 import { getServerSession, Session } from "next-auth";
 import { authOptions } from "../_lib/auth";
+import { Separator } from "./ui/separator";
 
 interface User {
     email: string;
@@ -77,10 +78,25 @@ const Header = async () => {
                                             </AvatarFallback>
                                         </Avatar>
                                     </DropdownMenuTrigger>
-                                    <DropdownMenuContent>
+                                    <DropdownMenuContent className="mx-4 w-60">
                                         <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
                                         <DropdownMenuSeparator />
-                                        <DropdownMenuItem>Perfil</DropdownMenuItem>
+                                        <Link href="/profile">
+                                            <DropdownMenuItem className="cursor-pointer">
+                                                <User />
+                                                Perfil
+                                            </DropdownMenuItem>
+                                        </Link>
+                                        <DropdownMenuItem>
+                                            <div className="flex items-center gap-2 cursor-not-allowed">
+                                                <Settings />
+                                                Configurações
+                                                <Badge variant="outline" className="text-zinc-400 text-xs">
+                                                    Em breve
+                                                </Badge>
+                                            </div>
+                                        </DropdownMenuItem>
+                                        <Separator className="my-2" />
                                         <DropdownMenuItem>
                                             <LogOut />
                                         </DropdownMenuItem>

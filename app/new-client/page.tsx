@@ -85,7 +85,7 @@ const NewClientPage = () => {
 
                 <div className="mb-4">
                     <label htmlFor="cnpjOrCpf" className="block text-sm font-medium text-gray-300">
-                       CPF/CNPJ
+                        CPF/CNPJ
                     </label>
                     <input
                         type="text"
