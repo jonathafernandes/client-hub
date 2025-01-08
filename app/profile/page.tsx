@@ -1,3 +1,4 @@
+import React from 'react';
 import { Session as PrismaSession } from '@prisma/client';
 import Footer from '../_components/footer';
 import Header from '../_components/header';

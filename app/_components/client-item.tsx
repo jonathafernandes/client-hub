@@ -23,7 +23,7 @@ import {
     AlertDialogTrigger,
 } from "./ui/alert-dialog"
 
-type ClientWithOrders = Prisma.ClientGetPayload<{
+export type ClientWithOrders = Prisma.ClientGetPayload<{
     select: {
         id: true;
         name: true;
@@ -55,6 +55,7 @@ type ClientWithOrders = Prisma.ClientGetPayload<{
             };
         };
     };
+    include: { orders: true };
 }>;
 
 type Products = Prisma.ProductGetPayload<{

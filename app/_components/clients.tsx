@@ -1,12 +1,11 @@
 'use client';
 
 import React, { useEffect, useState } from "react";
-import ClientItem from "./client-item";
+import ClientItem, { ClientWithOrders } from "./client-item";
 import { getProducts } from "../_actions/get-products";
-import { Client } from "@prisma/client";
 
 interface ClientsProps {
-    clients: Client[];
+    clients: ClientWithOrders[];
     onDelete: (id: string) => void;
 }
 
@@ -44,11 +43,10 @@ const Clients = ({ clients, onDelete }: ClientsProps) => {
                             </tr>
                         </thead>
                         <tbody className="bg-card-foreground divide-y divide-gray-700">
-                            {clients?.map((client: Client) => (
-                                // TODO: Resolver o erro de tipagem
+                            {clients?.map((client: ClientWithOrders) => (
                                 <ClientItem
                                     key={client.id}
-                                    client={client as any}
+                                    client={client}
                                     products={products}
                                     onDelete={() => onDelete(client.id)}
                                 />
