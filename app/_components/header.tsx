@@ -1,22 +1,49 @@
-"use client";
-
-import React from "react";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
 import Link from "next/link";
 import { House } from "lucide-react";
 import { Button } from "./ui/button";
 import LogOut from "./logout";
-import { useSession } from "next-auth/react";
 import { Badge } from "./ui/badge";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "./ui/dropdown-menu"
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
+import { db } from "../_lib/prisma";
+import { getServerSession, Session } from "next-auth";
+import { authOptions } from "../_lib/auth";
 
-const Header = () => {
-    const { data } = useSession();
+interface User {
+    email: string;
+    name: string | null;
+    image: string | null;
+    isAdmin: boolean;
+}
+
+const Header = async () => {
+    const session: Session | null = await getServerSession(authOptions);
+
+    const user: User | null = await db.user.findUnique({
+        where: {
+            email: session?.user?.email || "",
+        },
+        select: {
+            email: true,
+            name: true,
+            image: true,
+            isAdmin: true,
+        },
+    });
 
     return (
         <header>
             <Card className="rounded-sm bg-card">
-                {data?.user ? (
+                {user ? (
                     <CardContent className="py-5 sm:px-16 flex items-center justify-between">
                         <Link href="/">
                             <div className="flex flex-col gap-2 items-center">
@@ -29,10 +56,10 @@ const Header = () => {
                                 </Badge>
                             </div>
                         </Link>
-                        <div>
+                        <div className="flex gap-4 items-center">
                             <Link href="/">
                                 <Button variant="ghost" className="p-2" asChild>
-                                    <div className="flex items-center gap-2">
+                                    <div className="flex items-center gap-1">
                                         <House size={16} />
                                         <span>
                                             Início
@@ -40,7 +67,28 @@ const Header = () => {
                                     </div>
                                 </Button>
                             </Link>
-                            <LogOut />
+                            {user?.isAdmin ? (
+                                <DropdownMenu>
+                                    <DropdownMenuTrigger>
+                                        <Avatar className="border border-primary">
+                                            <AvatarImage src={user?.image || "https:github.com/shadcn.png"} />
+                                            <AvatarFallback>
+                                                {user?.name?.charAt(0).toUpperCase()}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                    </DropdownMenuTrigger>
+                                    <DropdownMenuContent>
+                                        <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
+                                        <DropdownMenuSeparator />
+                                        <DropdownMenuItem>Perfil</DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                            <LogOut />
+                                        </DropdownMenuItem>
+                                    </DropdownMenuContent>
+                                </DropdownMenu>
+                            ) : (
+                                <LogOut />
+                            )}
                         </div>
                     </CardContent>
                 ) : (

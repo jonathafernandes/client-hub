@@ -45,9 +45,10 @@ const Clients = ({ clients, onDelete }: ClientsProps) => {
                         </thead>
                         <tbody className="bg-card-foreground divide-y divide-gray-700">
                             {clients?.map((client: Client) => (
+                                // TODO: Resolver o erro de tipagem
                                 <ClientItem
                                     key={client.id}
-                                    client={client as any}
+                                    client={client}
                                     products={products}
                                     onDelete={() => onDelete(client.id)}
                                 />
