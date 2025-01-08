@@ -44,20 +44,20 @@ const ProfilePage = async () => {
                 <h1 className="text-lg font-bold border-b p-5">Perfil</h1>
                 <h4 className="uppercase m-5 font-semibold">Dados pessoais</h4>
                 <Card className='bg-zinc-950 mt-8'>
-                    <CardContent className='p-6 flex gap-4'>
+                    <CardContent className='p-6 flex flex-col xs:flex-row gap-4'>
                         <Avatar className="w-24 h-24 md:w-32 md:h-32">
-                        <AvatarImage src={user?.image || "https:github.com/shadcn.png"} />
-                        <AvatarFallback>
-                            {user?.name?.charAt(0).toUpperCase()}
-                        </AvatarFallback>
-                    </Avatar>
+                            <AvatarImage src={user?.image || "https:github.com/shadcn.png"} />
+                            <AvatarFallback>
+                                {user?.name?.charAt(0).toUpperCase()}
+                            </AvatarFallback>
+                        </Avatar>
                         <div>
                             <h2 className="text-xl font-bold">{user?.name}</h2>
                             <p className="text-zinc-600 mb-2">{user?.email}</p>
                             {user?.isAdmin && (
                                 <Badge className='bg-secondary'>Administrador</Badge>
                             )}
-                            <p className='flex items-center gap-1 mt-4 text-zinc-400'>
+                            <p className='flex flex-col md:flex-row items-start md:items-center gap-1 mt-4 text-zinc-400'>
                                 <TriangleAlert size={16} /> Para alterar os dados pessoais, entre em contato com o administrador.
                             </p>
                         </div>
