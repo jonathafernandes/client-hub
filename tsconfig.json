@@ -30,9 +30,11 @@
       }
     ]
   },
+  "typeRoots": ["./node_modules/@types", "./next-auth.d.ts"],
   "include": [
     "prisma/**/*.ts",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "next-env.d.ts", "src/**/*"
   ],
   "exclude": [
     "node_modules"

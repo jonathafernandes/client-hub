@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,11 +15,8 @@ import {
     DropdownMenuLabel,
     DropdownMenuSeparator,
     DropdownMenuTrigger,
-} from "./ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar"
-import { db } from "../_lib/prisma";
-import { getServerSession, Session } from "next-auth";
-import { authOptions } from "../_lib/auth";
+} from "./ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Separator } from "./ui/separator";
 
 interface User {
@@ -26,20 +26,20 @@ interface User {
     isAdmin: boolean;
 }
 
-const Header = async () => {
-    const session: Session | null = await getServerSession(authOptions);
+const Header = () => {
+    const [user, setUser] = useState<User | null>(null);
 
-    const user: User | null = await db.user.findUnique({
-        where: {
-            email: session?.user?.email || "",
-        },
-        select: {
-            email: true,
-            name: true,
-            image: true,
-            isAdmin: true,
-        },
-    });
+    useEffect(() => {
+        const fetchUser = async () => {
+            const response = await fetch('/api/user');
+            if (response.ok) {
+                const data = await response.json();
+                setUser(data);
+            }
+        };
+
+        fetchUser();
+    }, []);
 
     return (
         <header>
@@ -48,11 +48,11 @@ const Header = async () => {
                     <CardContent className="py-5 sm:px-16 flex items-center justify-between">
                         <Link href="/">
                             <div className="flex flex-col gap-2 items-center">
-                                <Image src="/logoipsum-280.svg" alt="ClientHub" height={18} width={50} />
-                                <span className="text-sm text-zinc-400">
+                                <Image src="/logoipsum-280.svg" alt="ClientHub" height={30} width={30} />
+                                <span className="text-sm">
                                     ClientHub
                                 </span>
-                                <Badge variant="outline">
+                                <Badge variant="outline" className="text-zinc-400">
                                     Beta
                                 </Badge>
                             </div>
@@ -72,7 +72,7 @@ const Header = async () => {
                                 <DropdownMenu>
                                     <DropdownMenuTrigger>
                                         <Avatar className="border border-primary">
-                                            <AvatarImage src={user?.image || "https:github.com/shadcn.png"} />
+                                            <AvatarImage src={user?.image || "https://github.com/shadcn.png"} />
                                             <AvatarFallback>
                                                 {user?.name?.charAt(0).toUpperCase()}
                                             </AvatarFallback>
@@ -111,7 +111,7 @@ const Header = async () => {
                     <CardContent className="py-5 sm:px-16">
                         <Link href="/">
                             <div className="flex flex-col gap-2 items-center">
-                                <Image src="/logoipsum-280.svg" alt="ClientHub" height={18} width={50} />
+                                <Image src="/logoipsum-280.svg" alt="ClientHub" height={30} width={30} />
                                 <span className="text-sm text-zinc-400">
                                     ClientHub
                                 </span>
@@ -121,8 +121,7 @@ const Header = async () => {
                             </div>
                         </Link>
                     </CardContent>
-                )
-                }
+                )}
             </Card>
         </header>
     );

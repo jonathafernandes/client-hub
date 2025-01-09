@@ -91,8 +91,6 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
                 discount: selectedDiscount,
             };
     
-            console.log('Dados do pedido a serem enviados:', JSON.stringify(orderData, null, 2));
-    
             const response = await fetch('/api/orders', {
                 method: 'POST',
                 headers: {
@@ -102,7 +100,6 @@ const NewOrderDialog = ({ products, clientId }: NewOrderDialogProps) => {
             });
     
             const responseData = await response.text();
-            console.log('Resposta da API:', response.status, responseData);
     
             if (!response.ok) {
                 throw new Error(`Erro ao salvar o pedido: ${response.statusText}. Detalhes: ${responseData}`);
