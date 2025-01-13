@@ -11,6 +11,7 @@ import { deleteClient } from "../_actions/delete-client";
 import { Product, Client as PrismaClient, OrderProduct } from "@prisma/client";
 import { Decimal } from "@prisma/client/runtime/library";
 import { deleteOrder } from "../_actions/delete-order";
+import { Skeleton } from "./ui/skeleton"; // Import do Skeleton
 
 interface Client extends PrismaClient {
   orders: Order[];
@@ -28,11 +29,13 @@ interface Order {
   client: Client;
   orderProducts: (OrderProduct & { product: Product })[];
 }
-export const revalidate = 0
+
+export const revalidate = 0;
+
 const Dashboard = () => {
   const queryClient = useQueryClient();
 
-  const { data: clients, error } = useQuery<Client[]>({
+  const { data: clients, isLoading, error } = useQuery<Client[]>({
     queryKey: ['clients'],
     queryFn: async () => await getClients(),
     staleTime: 0,
@@ -85,7 +88,7 @@ const Dashboard = () => {
   };
 
   const handleDeleteOrder = (id: string) => {
-    deleteOrderMutation.mutate(id)
+    deleteOrderMutation.mutate(id);
   };
 
   return (
@@ -99,7 +102,13 @@ const Dashboard = () => {
           </Link>
         </Button>
       </div>
-      {error ? (
+      {isLoading ? (
+        <div className="space-y-4">
+          <Skeleton className="h-8 w-full rounded-none" />
+          <Skeleton className="h-10 w-full rounded-none" />
+          <Skeleton className="h-10 w-full rounded-none" />
+        </div>
+      ) : error ? (
         <p className="text-red-500">Erro ao carregar clientes!</p>
       ) : (
         <Clients clients={clients ?? []} onDelete={handleDeleteClient} />
@@ -107,27 +116,35 @@ const Dashboard = () => {
       {(clients ?? []).length > 0 && (
         <>
           <h4 className="uppercase m-5 font-semibold">Pedidos</h4>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y border border-gray-500">
-              <thead className="bg-gray-950">
-                <tr className="text-left text-xs font-medium uppercase tracking-wider">
-                  <th className="px-4 py-3">Número</th>
-                  <th className="px-4 py-3">Cliente</th>
-                  <th className="px-4 py-3">Data</th>
-                  <th className="px-4 py-3">Desconto</th>
-                  <th className="px-4 py-3">Valor</th>
-                  <th className="px-4 py-3">Baixar</th>
-                </tr>
-              </thead>
-              <tbody className="bg-card-foreground divide-y divide-gray-700">
-                {clients?.flatMap((client) =>
-                  client.orders.map((order: Order) => (
-                    <OrderItem key={order.id} client={client} order={order} onDelete={handleDeleteOrder} />
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+          {isLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-8 w-full rounded-none" />
+              <Skeleton className="h-10 w-full rounded-none" />
+              <Skeleton className="h-10 w-full rounded-none" />
+            </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y border border-gray-500">
+                <thead className="bg-gray-950">
+                  <tr className="text-left text-xs font-medium uppercase tracking-wider">
+                    <th className="px-4 py-3">Número</th>
+                    <th className="px-4 py-3">Cliente</th>
+                    <th className="px-4 py-3">Data</th>
+                    <th className="px-4 py-3">Desconto</th>
+                    <th className="px-4 py-3">Valor</th>
+                    <th className="px-4 py-3">Baixar</th>
+                  </tr>
+                </thead>
+                <tbody className="bg-card-foreground divide-y divide-gray-700">
+                  {clients?.flatMap((client) =>
+                    client.orders.map((order: Order) => (
+                      <OrderItem key={order.id} client={client} order={order} onDelete={handleDeleteOrder} />
+                    ))
+                  )}
+                </tbody>
+              </table>
+            </div>
+          )}
         </>
       )}
     </div>

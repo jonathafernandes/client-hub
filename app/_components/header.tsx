@@ -96,7 +96,7 @@ const Header = () => {
                                                 </Badge>
                                             </div>
                                         </DropdownMenuItem>
-                                        <Separator className="my-2" />
+                                        <Separator className="my-1" />
                                         <DropdownMenuItem>
                                             <LogOut />
                                         </DropdownMenuItem>

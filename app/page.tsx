@@ -36,17 +36,12 @@ export default async function Home() {
               <h1 className="text-2xl font-bold mt-10 mb-2">
                 Bem-vindo(a) ao ClientHub!
               </h1>
-              <p>Comece a usar.</p>
             </div>
 
             <SignIn />
 
-            <p className="text-gray-300 mt-16 text-center">
-              Relatórios dos dados de seus clientes.
-            </p>
-            <p className="text-center text-gray-500 m-2">
-              Aqui você pode gerar os relatórios mensais de seus clientes de forma simples e
-              eficiente.
+            <p className="text-center text-gray-500 mt-16">
+              Plataforma de gerenciamento de clientes da B4 Comunicação.
             </p>
           </>
         )}

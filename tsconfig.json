@@ -35,7 +35,7 @@
     "prisma/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts", "src/**/*"
-  ],
+, "app/_components/ui/skeleton.tsx"  ],
   "exclude": [
     "node_modules"
   ]
