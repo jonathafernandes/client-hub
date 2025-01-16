@@ -5,7 +5,7 @@ const Footer = () => {
 
     return (
       <footer className="w-full bg-card p-6 text-center border rounded-sm">
-        <p className="text-gray-400 text-xs opacity-75">© {currentYear} Copyright ClientHub – B4 Comunicação</p>
+        <p className="text-gray-400 text-xs opacity-75">© {currentYear} Copyright ClientHub</p>
       </footer>
     );
   };
