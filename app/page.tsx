@@ -41,7 +41,7 @@ export default async function Home() {
             <SignIn />
 
             <p className="text-center text-gray-500 mt-16">
-              Plataforma de gerenciamento de clientes da B4 Comunicação.
+              Plataforma de gerenciamento de clientes.
             </p>
           </>
         )}
