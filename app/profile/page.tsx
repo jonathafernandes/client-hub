@@ -9,6 +9,7 @@ import { Badge } from '../_components/ui/badge';
 import { Card, CardContent } from '../_components/ui/card';
 import { TriangleAlert } from 'lucide-react';
 import Header from '../_components/header';
+import { redirect } from 'next/navigation';
 
 interface User {
     email: string;
@@ -25,6 +26,10 @@ interface CustomSession extends PrismaSession {
 
 const ProfilePage = async () => {
     const session: CustomSession | null = await getServerSession(authOptions);
+
+    if (!session) {
+        return redirect("/");
+    }
 
     const user: User | null = await db.user.findUnique({
         where: {

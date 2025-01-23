@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../_components/header";
 import Footer from "../_components/footer";
 import { Button } from "../_components/ui/button";
@@ -8,10 +8,24 @@ import { useForm } from "react-hook-form";
 import { saveClient } from "../_actions/save-client";
 import { ClientParams } from "../_actions/save-client";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const NewClientPage = () => {
     const { register, handleSubmit, formState: { errors }, reset } = useForm<ClientParams>();
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const { data: session, status } = useSession();
+    const router = useRouter();
+
+    useEffect(() => {
+        if (status === "unauthenticated") {
+            router.push("/");
+        }
+    }, [status, router]);
+
+    if (!session) {
+        return null;
+    }
 
     const onSubmit = async (data: ClientParams) => {
         setIsSubmitting(true);
@@ -41,7 +55,6 @@ const NewClientPage = () => {
             setIsSubmitting(false);
         }
     };
-
 
     return (
         <div className="flex flex-col min-h-screen font-[family-name:var(--font-geist-sans)]">
